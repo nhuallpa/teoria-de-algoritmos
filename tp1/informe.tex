@@ -5,6 +5,9 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 
+\renewcommand{\baselinestretch}{1.5}
+
+\setlength{\parskip}{1em}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -83,13 +86,167 @@ DTI brinda un sistema que mediante una consulta (encendido / apagado) nos devolv
     \item Cada encendido / apagado (y su consecuente rastreo) es \(O(1)\).
     \item El empleado una vez en su puesto no se retira hasta concluir su turno.
 \end{itemize}
+
 \subsection{Descripción del algoritmo}
+
+Tenemos un conjunto de empleados \(\{1,2,..,n\}\); el empleado \(i^{th}\) corresponde a un intervalo de tiempo que comienza al instante \(s(i)\) y finaliza de trabajar al instante \(f(i)\).
+Diremos que un subconjutno de empleados es compatible si no hay dos de ellos que al mismo tiempo se superpongan y nuestro objetivo es encontrar un subconjunto compatible tan grande como sea posible.
+El tiempo \(f(i)\) de los empleados del conjunto seran los tiempos que deben encender el sensor de DTI.
+
+La idea basica para el algoritmo greedy es seleccionar el primer empleado \(i_1\), una vez seleccionado, descartamos del resto de los empleados a aquellos que tienen una intersección con el seleccionado \(i_1\).
+Luego seleccionamos el empleado \(i_2\) y volvemos a descartar todos los empleados que intesecan con el empleado \(i_2\). Continuamos de esta manera hasta que nos quedamos sin empleados para evaluar.  
+
+De esta forma nos iremos quedando con los empleados que terminan primero, o sea el empleado que tenga menor \(f(i)\) para poder tomar el valor del instante \(f(i)\) como el tiempo donde se debe encender el sensor para 
+abarcar la mayor cantidad de empleados por cada encendido del sensor. El resultado sera \textbf{óptimo} si obtenemos abarcamos a todos los empleados con la menor cantidad de encendidos del sensor de DTI.
+
+El algoritmo funciona de la siguiente manera:
+\begin{enumerate}
+    \item Ordena la lista de empleados de menor a mayor según el valor \(t_f\).
+    \item Selecciona el \(t_f\) del primer empleado de la lista \(t_{fx}\)
+    \item Elimina al empleado seleccionado y todos los demás empleados que cumplan que \(t_i \leq t_{fx} \leq t_f\), lo cual puede simplificarse y pedir que simplemente \(t_i \leq tfx\), puesto que ya se encuentra ordenado por \(t_f\) de forma ascendente.
+    \item Repite los pasos 2 y 3 hasta que ya no queden empleados en la lista.
+    \item Los \(t_{fx}\) seleccionados, son los tiempos en los cuales se debe realizar la consulta y encender el módulo DTI.
+\end{enumerate}
+
 
 \subsection{Pseudocódigo del algoritmo}
 
-\subsection{Análisis del algotimo}
+\begin{lstlisting}[language=Python, caption=Algoritmo de greddy para Interval Scheduling]
+
+    
+lista[int] obtenerTiemposDeEncendido(lista[empleado] listaEmpleados)
+
+    OrdenarDeMenorAMayorPorTiempoFinal(listaEmpleados); 
+
+    int Tprendido, i;
+
+    Mientras listaEmpleados != vacio 
+
+        Tprendido = listaEmpleados(0).tf; 
+
+        listaTiemposEncendidos.agregar(Tprendido);
+
+        listaEmpleados.remover(0); 
+        
+        i = 0;
+
+        Mientras listaEmpleados != fin 
+                
+            Si (Tprendido >= listaEmpleados(i).ti); 
+            
+                listaEmpleados.remover(i); 
+                
+            Sino
+                i++; 
+
+            FinSi
+
+        FinMientras
+            
+    Finmientras
+
+Devolver listaTiemposEncendidos; 
+
+\end{lstlisting}    
+
+
+\subsection{Ejemplo de ejecución}
+
+Solo se detallan los \(t_i\) y \(t_f\) de cada empleado. En las ejecuciones del bucle, se marcan previamente en rojo los empleados que serán eliminados de la lista.
+
+
+\underline{Preparación:}
+
+listaEmpleados = \{(1,4) - (2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7) - (5,8) - (2,8) - (6,8) - (1,10) - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
+
+listaTiemposEncendidos = \{\}
+
+
+\underline{Primera ejecución del bucle:}
+
+listaTiemposEncendidos = \{\textcolor{blue}{4}\}
+
+listaEmpleados = \{\textcolor{red}{(1,4) - (2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7)} - (5,8) - \textcolor{red}{(2,8)} - (6,8) - \textcolor{red}{(1,10)} - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
+
+
+listaEmpleados = \{(5,8) - (6,8) - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
+
+
+\underline{Segunda ejecución del bucle:}
+
+listaTiemposEncendidos = \{4 - \textcolor{blue}{8}\}
+
+listaEmpleados = \{\textcolor{red}{(5,8) - (6,8) - (5,10) - (7,10) - (7,11) - (8,11)} - (10,12) - (11,12) - (12,14)\}
+
+listaEmpleados = \{(10,12) - (11,12) - (12,14)\}
+
+\underline{Tercera ejecución del bucle}:
+
+listaTiemposEncendidos = \{4 - 8 - \textcolor{blue}{12}\}
+
+listaEmpleados = \{\textcolor{red}{(10,12) - (11,12) - (12,14)}\}
+
+listaEmpleados = \{\}
+
+Resultado:
+
+listaTiemposEncendidos = {4 - 8 - 12}
+
+
+
+\subsection{Análisis del algoritmo}
+
+Necesitamos demostrar que la solución es óptima. Para esto, vamos a necesitar unas definiciones:
+\begin{itemize}
+    \item Definimos \(R\) el conjunto de empleados que no fueron ni seleccionados y ni descartados.
+    \item Definimos \(E\) como el conjunto de empleados cuyos intervalo son compatibles.
+    \item Definimos \(O\) como el conjunto de empleados cuyos intevalos de trabajo es óptimo.
+\end{itemize}
+Luego vamos a mostrar que \(|E| = |O|\), o sea que el conjunto \(E\) tiene la misma cantidad de intervalos que \(O\) y 
+por lo tanto \(E\) es una solución óptima.
+
+Para la prueba introduciremos la siguiente notación:
+\begin{itemize}
+    \item Dado \(\{i_1,...,i_k\}\) el conjunto de empleados en \(E\) en orden que fueron agregados a \(E\). Notar que \(|E|=k\).
+    \item Dado \(\{j_1,...,j_m\}\) el conjunto de tiempos en \(O\) ordenos de izquierda a derecha. Notar que \(|O|=m\).
+\end{itemize}
+
+El objetivo es mostrar que \(k=m\). 
+La manera en que el algoritmo de greedy se mantiene adelante (stays ahead) es que por cada unos de los intrervalos de los empleados, 
+finalice tan pronto como lo haga el correspodiente intervalo en \(O\).
+
+\begin{quote}
+    \textbf{(1.1) Para todos los indices \(r<k\) tenemos que \(f(i_r) \leq f(j_r)\)}
+\end{quote}
+
+\textbf{Demostración:}  Probaremos la sentencia anterior mediante el método inductivo. 
+Para \(r=1\) la sentencia anterior es cierta, el algoritmo empieza seleccionando el empleado \(i_1\) con el menor tiempo de finalización.
+
+Para el caso inductivo, o sea \(r>1\) asumiremos como nuestra hipotesis inductiva que la sentencia es verdadera para \(r-1\), y queremos probar que es tambien es lo es para \(r\). 
+La hipotesis inductiva nos dice que asumamos verdadero que \(f(i_{r-1}) \leq f(j_{r-1})\). Queremos demostrar que \(f(i_{r}) \leq f(j_{r})\).
+
+Dado que \(O\) consiste en \textit{intervalos compatibles}, sabemos que \(f(j_{r-1}) \leq s(j_r)\). Combinando esto último con la hipotesis inductiva \(f(i_{r-1}) \leq f(j_{r-1})\), obtenemos \(f(i_{r-1}) \leq s(j_{r})\). 
+Asi el intervalo \(j_r\) esta en conjunto \(R\) de los intervalos disponibles al mismo tiempo cuando el algoritmo de greedy selecciona \(i_r\).
+El algoritmo de greedy selecciona el empleado cuyo intervalo tiene el \textit{tiempo final mas chico} (\(i_{r}\)); y dado que intervalo \(j_{r}\) es uno de estos intervalos, tenemos que \(f(i_r) \leq f(j_r)\), completando asi el paso inductivo.
+
+De esta forma demostramos que nuestro algoritmo se mantiene adelante del conjunto optimo \(O\). Ahora veremos porque esto implica optimalidad del conjunto \(E\) de algoritmo de greedy.
+
+\begin{quote}
+    \textbf{(1.2) El algoritmo de greedy retorna un conjunto \(E\) óptimo.}
+\end{quote}
+
+\textbf{Demostración:} Para demostrarlo utilizaremos la contradicción. Si \(E\) no es optimo, entonces el conjunto \(O\) debe tener mas intervalos, o sea que tenemos \(m>k\) y aplicando 1.1, cuando r=k, 
+obtenemos que \(f(i_k) \leq f(j_k)\). Dado que \(m>k\), existe un empleado \(j_{k+1}\) en \(O\). Este empleado empieza despues que el empleado \(j_k\) termina y por consiguiente despues de que el empleado \(i_k\) termine.
+Entonces, despues de eliminar todos los empleados que no son compatibles con los empleados \(i_1,...,i_k\), el conjunto de posibles empleados R aún contiene el empleado \(j_{k+1}\). 
+Pero el algoritmo de greedy se detiene con el empleado \(i_k\) y este supuestamente se detiene porque \(R\) esta vacio, lo cual es una contradicción. 
+
+\textbf{Complejidad de algoritmo e implementación}: Si la lista no esta ordenada podemos utilizar un metodo de ordeamiento del orden \(O(n log(n))\) como el heapsort. 
+Es O(n) si la lista ya viene ordenada. En el peor de los casos, con la lista ya ordenada, se hace n veces O(1). Siendo el peor de todos los casos que todos los empleados tengan turnos de una hora, separados una hora entre sí (máxima cantidad de chequeos en un día).
+
 
 \section{Una nueva regulación industrial}
+
+
 \section{Conclusión}
 
 
