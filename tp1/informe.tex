@@ -243,10 +243,164 @@ Pero el algoritmo de greedy se detiene con el empleado \(i_k\) y este supuestame
 \textbf{Complejidad de algoritmo e implementación}: Si la lista no esta ordenada podemos utilizar un metodo de ordeamiento del orden \(O(n log(n))\) como el heapsort. 
 La complejidad total es O(n) si la lista ya viene ordenada. 
 
+\newpage
 \section{Una nueva regulación industrial}
 
+\subsection{Descipción del problema}
+A raiz de una nueva regulación industrial un fabricante debe rotular cada lote que produce según un valor numérico que lo caracteriza. 
+Cada lote está conformado por \(n\) piezas. A cada una de ellas se le realiza una medición de volumen. La regulación considera que el lote es válido si más de la mitad de las piezas tienen el mismo volumen. 
+En ese caso el rótulo deberá ser ese valor. De lo contrario el lote se descarta.
 
-\section{Conclusión}
+\subsection{Proceso A}
+
+\subsubsection{Descripción}
+Actualmente cuentan con el proceso “A” que consiste en para cada pieza del lote contar cuantas de las restantes tienen el mismo volumen. 
+Si alguna de las piezas corresponde al “elemento mayoritario”, lo rotula. De lo contrario lo rechaza.
+
+\subsubsection{Pseudocódigo}
+
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
+int elementoMayoritario(list[pieza] listaPiezas)
+	int totalPiezas = listaPiezas.contar();
+	int volumenPieza, i, piezaActual, cantidadVolumen;
+	piezaActual = 0;
+
+	Mientras piezaActual < totalPiezas
+        volumenPieza= listaPiezas(piezaActual).volumen;
+        cantidadVolumen = 1;
+		i = 0;
+		
+		Mientras listaPiezas != fin
+
+			Si(piezaActual != i && listaPiezas(i).volumen == volumenPieza)
+				cantidadVolumen ++;
+			i++;
+
+		Fin Mientras
+			
+        Si(cantidadVolumen >techo(totalPiezas/2)) 
+		    Retornar volumenPieza;
+        Sino
+            piezaActual++;
+        FinSi
+
+    Fin Mientras
+
+Retornar 0; 
+
+\end{lstlisting}
+
+\subsubsection{Analisis del algoritmo}
+
+Consideramos la unidad (1) de complejidad temporal como el tiempo de ejecución de una operación elemental (suma, asignación, etc). 
+Y por otro lado, consideramos la unidad (1) de complejidad espacial como un byte. Y por último \(n\) el tamaño de la lista de piezas que guarda todas las piezas.
+
+Realizamos el siguiente analisis detallado:
+
+\begin{itemize}
+    \item Previo a primer mientras
+    \begin{itemize}
+        \item +3 Declaración, inicialización de totalPiezas y una obtención.
+        \item +4 Declaración de volumenPieza, i, piezaActual, cantidadVolumen.
+        \item +1 asignación a piezaActual.
+    \end{itemize}
+    \item dentro de primer mientras (éste recorre a lo sumo todas las piezas, el total de lo que se obtenga en costo interno será multiplicado por n).
+    \begin{itemize}
+        \item +1 chequeo de condición de iteración
+        \item +2 obtención de volumen y asignación a volumenPieza.
+        \item +1 asignación a cantidadVolumen.
+        \item +1 asignación a i
+    \end{itemize}
+    \item Dentro de segundo mientras (también dentro de primer mientras, como también puede que recorra la listaPiezas por completo, añade un *n a la complejidad final).
+    \begin{itemize}
+        \item +1 chequeo de condición de iteración
+        \item +4 dos comparaciones, una obtención y un and (condición si).
+        \item +2 caso entra a si, suma y asignación a cantidadVolumen.
+        \item +2 suma y asignación a i        
+    \end{itemize}
+    \item Termina segundo mientras, sigue primer mientras
+    \begin{itemize}
+        \item +2 costo de condición si, comparación y techo.
+        \item +1 caso entra al si, retorno.
+        \item +2 caso no entra al si, suma y asignación.        
+    \end{itemize}
+    \item Termina primer mientras
+    \begin{itemize}
+        \item +1 retorna, si el retorno no se realizó dentro del primer mientras.
+    \end{itemize}
+
+\end{itemize}
+
+Definimos T(n), función de complejidad temporal:
+
+\begin{equation}
+    T(n) = 8 + n* ( 5 + ( (n-1)*9 + n*7 ) + 2 + 2 + 1 ) 
+\end{equation}
+\begin{equation}
+    T(n) = 8 + n*( 10 + (9n - 9 + 7n) ) = 8 + n*( 16n + 1)
+\end{equation}
+\begin{equation}
+    T(n) = 16n*n + n + 8
+\end{equation}
+
+La asignación de costo en la definición previa de \(T(n)\) se define según el peor caso posible. 
+Este es que se entre a la condición si del segundo mientras, la mayor cantidad de veces posible. 
+Este peor caso es que n sea impar y halla dos subconjuntos de tamaño \(n/2\) (con división entera) cada uno con igual volumen interno y un elemento m, 
+no incluido en alguno de estos subconjuntos. 
+Esto provoca que se ingrese \(n-1\) veces al sí del segundo mientras (una vez por cada elemento de los subconjutos), 
+además de \(n\) no ingresos a dicho si (uno por cada elemento que encuentra al menos a uno sin su mismo volumen, todos lo hacen).
+
+Como resultado, \(T(n)\) es \(n^2\).
+
+\newpage
+\subsection{Proceso B}
+\subsubsection{Descripción}
+En este proceso se tiene en cuenta que se debe ordenar las piezas por volumen y con ello luego reducir el tiempo de búsqueda del elemento mayoritario.
+
+\subsubsection{Pseudocódigo}
+
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
+
+int elementoMayoritario(list[pieza] listaPiezas)
+
+    Ordenar(listaPiezas)
+    int totalPiezas = listaPiezas.contar()
+    int volumenPieza, i, cantidadVolumen
+    bool mismoVolumen
+    i = 0
+
+    Mientras i < totalPiezas
+        volumenPieza= listaPiezas(i).volumen
+        cantidadVolumen = 1
+        mismoVolumen = TRUE
+        i++
+
+        Mientras listaEmpleados != fin && mismoVolumen
+            Si(listaEmpleados(i).volumen == volumenPieza)
+                cantidadVolumen ++
+                i++
+            Sino
+                Si(cantidadVolumen > techo(totalPiezas/2))
+                    Retornar volumenPieza
+                Sino
+                    mismoVolumen = FALSE
+                FinSi
+            FinSi
+        FinMientras
+    FinMientras
+	
+Retornar 0
+
+\end{lstlisting}
+
+\subsubsection{Analisis del algoritmo}
+
+\newpage
+\subsection{Proceso C}
+\subsubsection{Descripción}
+\subsubsection{Pseudocódigo}
+\subsubsection{Analisis del algoritmo}
+\subsection{Conclusiones}
 
 
 
