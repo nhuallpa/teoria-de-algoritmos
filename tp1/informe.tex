@@ -38,9 +38,13 @@
 
 \author{    Nestor Huallpa, \textit{Padrón Nro. 88614}\\
             \texttt{ huallpa.nestor@gmail.com }\\\\  
-            nnnnnnnnnnnnnnnnnnnnn, \textit{Padrón Nro. xxxx}\\
-            \texttt{ nnn@yahoo.com.ar }\\\\              
-            \texttt{\footnotesize 1º Entrega: xx/xx/xxx}\\
+            Pepe, Jonathan Leonel, \textit{Padrón Nro. 94692}\\
+            \texttt{ jonathan.leonel.pepe@gmail.com }\\\\     
+            Ignacio Argel, \textit{Padrón Nro. 104351}\\
+            \texttt{ iargel@fi.uba.ar }\\\\      
+            Mateo Javier Ausqui, \textit{Padrón Nro. 102593}\\
+            \texttt{ mausqui@fi.uba.ar }\\\\              
+            \texttt{\footnotesize 1º Entrega: 20/05/2020}\\
             \\\\\\\\\\\\\\\\\\
             \normalsize{1do. Cuatrimestre de 2020}\\ 
             \normalsize{75.29/95.06 Teoría de Algoritmos I} \\
@@ -359,7 +363,7 @@ En este proceso se tiene en cuenta que se debe ordenar las piezas por volumen y 
 
 \subsubsection{Pseudocódigo}
 
-\begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso B]
 
 int elementoMayoritario(list[pieza] listaPiezas)
 
@@ -480,10 +484,169 @@ Por lo tanto, se tiene que E(n), función de espacio total ocupado por la ejecuc
 \newpage
 \subsection{Proceso C}
 \subsubsection{Descripción}
-\subsubsection{Pseudocódigo}
-\subsubsection{Analisis del algoritmo}
-\subsection{Conclusiones}
 
+El razonamiento que guía el desarrollo de este algoritmo es que si el elemento \(x\) es el mayoritario de una lista, esto es que aparece más de 1 + (n/2) veces, siendo n la cantidad total de elementos, no resultará posible ubicar todos los \(x\) de forma tal que, al menos, dos de estos elementos queden de forma contigua. 
+Dicho de otra manera: si se forman pares de elementos sucesivos, el elemento mayoritario debe aparecer duplicado en al menos uno de estos pares.
+
+En este caso en particular (“proceso C”), se dispone de una lista de piezas sin ningún ordenamiento en particular. 
+Se procede entonces a elegir grupos de dos piezas (pares de elementos) y comparar sus volúmenes para decidir si se trata de un posible elemento mayoritario, el cual llamaremos candidato. 
+Si esto sucede, entonces se guarda una copia de esta pieza en una lista auxiliar (llamada lista de pares iguales). 
+Finalizado este procedimiento con la lista de piezas original, se realiza lo mismo con la lista de pares iguales, y así sucesivamente de forma recursiva. 
+Este  método utiliza la técnica conocida como Divide y Vencerás, ya que en cada paso (subproblema) el número de elementos se reduce a menos de la mitad.
+
+Resulta importante analizar qué sucede cuando la cantidad de elementos de alguna de las listas que se van generando es impar y distinto de uno. 
+En este caso, si existe elemento mayoritario debe serlo también para la sublista formada por los primeros \(n-1\) elementos. 
+De lo contrario, se escogerá el elemento \(n\)-ésimo de la lista como candidato.
+
+El caso base de la recursión sucede cuando se obtiene una lista con uno o dos elementos (piezas) de igual volumen. 
+Esta pieza será la candidata a ser el elemento mayoritario del lote original. Esto quiere decir que, si existe elemento mayoritario, éste será el elemento. 
+Si esto último no sucede, se concluye que la lista no cuenta con un elemento mayoritario.
+
+Por último se recorre la lista original para verificar si la cantidad de piezas con el mismo volumen de la pieza candidata supera a la mitad de la piezas del lote. 
+Si lo anterior se cumple, se ha encontrado el elemento mayoritario. 
+Caso contrario, el lote deberá ser descartado.
+
+
+\subsubsection{Pseudocódigo}
+
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Elemento Mayoritario]
+int ElementoMayoritario(list[pieza] listaPiezas) 
+
+	int elCandidato;
+	int n = listaPiezas.contar();
+	elCandidato = Candidato(listaPiezas);
+
+	Si (elCandidato  == 0 || Apariciones(listaPiezas, elCandidato) <= piso(n/2))
+		Retornar 0; //0 indica que el lote debe ser descartado, puesto que no hay elemento mayoritario
+	Sino
+		Retornar elCandidato; 
+
+	FinSi
+Fin ElementoMayoritario
+
+\end{lstlisting}
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Apariciones]
+int Apariciones(list[pieza] listaPiezas, int volBuscado)
+	
+	int cantidad = 0;
+	int final = listaPiezas.contar() - 1;
+
+	Para (int i = 0, i <= final; i++)
+		
+		Si (listaPiezas(i).volumen  == volBuscado)
+			cantidad++;
+		FinSi
+
+	FinPara
+
+	Retornar cantidad;
+Fin Aparaciones
+\end{lstlisting}
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Candidato]
+int Candidato(list[pieza] listaPiezas)
+
+	int n, m;
+	n = listaPiezas.contar();
+
+	Si (n == 0)
+		Retornar 0;
+	FinSi
+
+	Si (n == 1)
+		Retornar  listaPiezas(0).volumen;
+	FinSi
+
+	lista[piezas] paresIguales = EncontrarParesIguales(listaPiezas);
+	m = Candidato(paresIguales);
+
+	Si ((n % 2 == 0) || m != 0)
+		Retornar m;
+	Sino
+		Retornar listaPiezas(n-1).volumen;
+	FinSi
+
+Fin Candidato
+
+\end{lstlisting}
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
+list[pieza] EncontrarParesIguales(list[pieza] listaPiezas)
+
+    list[pieza] listaParesIguales;
+    int n = listaPiezas.contar();
+    int k = 0;
+    si (n > 2)
+        Para (int i = 0, i <= (n/2) - 1, i++)
+            Si (listaPiezas(2i).volumen == listaPiezas(2i + 1).volumen)
+                listaParesIguales(k) = listaPiezas(2i + 1);
+                k++;
+            FinSi
+        FinPara
+    Sino
+        listaParesIguales(0) = listaPiezas(0);
+    FinSino
+    
+    Retornar listaParesIguales;
+Fin EncontrarParesIguales
+
+\end{lstlisting}
+
+\subsubsection{Analisis del algoritmo}
+
+Del pseudocódigo podemos obtener el tiempo de ejecución en base a la funcion C(n) la cual tiene la siguiente ecuación de recurrencia:
+
+Ecuación de recurrencia:
+
+\begin{equation} \label{eq1}
+    \begin{split}
+        C(n) & = P(n) + C(K) + O(1) \\
+        C(1) & = m \\
+        C(0) & = 0
+    \end{split} 
+\end{equation}
+
+
+\(P(n)\) es el costo de llamados al algoritmo ParesIguales y es facir de ver que es \(O(n)\) porque recorre los \(n\) valores del arreglo. 
+\(C(K)\) es el costo de invocaciones recursivas y \(K\) es la cantidad maxima de elementos que puede tener B. 
+El valor de \(K\) llega a su maximo cuando todos los elementos son igual osea que en el peor de los casos el tamaño de B va a ser \(n/2\). Por lo tanto lo siguiente es la ecuación de recurrencia:
+
+\begin{equation} \label{eq1}
+    \begin{split}
+        C(n) &= C(n/2) + O(n) \\
+        C(r) &= O(1)
+    \end{split} 
+\end{equation}
+
+
+Si aplicamos el teorema del maestro con el caso 3 para a=1, b=2 y f(n)=n, calculamos:
+
+\[
+    f(n) =  O(n^(logb(a) + e)) con e>0
+\]
+
+\[
+    n =  Omega(n^log2(1) + e) = n^0 + e  si e=1 
+\]
+Con lo cual se cumple la primer condición condición y ahora busco un c para que se cumpla \(a*f(n/b) <= c*f(n)\) con \(c < 1\) y \(n>>\) reemplazando por a y b:
+
+\[
+    1*n/2 <= c * n    
+\]
+
+con lo cual con \(c=1/2\) se cumple la segunda condición y por lo tanto \(T(n) = \Theta(n)\)
+
+La \textbf{complejidad espacial} es \(O(n)\) debido a que el arreglo de elemento se va reduciendo de \(n/i*2\) con \(i > 0\) hasta que quede un elemento. 
+En el peor de los casos pueden haber varios arreglos en memoria que sumados estarian acotados por \(2n\). 
+Con lo cual la complejidad seria \(O(n)\).
+
+
+\subsection{Comparaciones}
+
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{comparacion.png}
+\end{figure}
+
+
+Como se ve en la tabla, aunque todos tengan la misma complejidad espacial, el Algoritmo C supera a los demás, ya que es óptimo temporalmente.
 
 
 
