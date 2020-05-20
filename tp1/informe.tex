@@ -395,6 +395,88 @@ Retornar 0
 
 \subsubsection{Analisis del algoritmo}
 
+Realizamos el siguiente analisis detallado:
+
+\begin{itemize}
+    \item Incialización:
+    \begin{itemize}
+        \item +n*log(n) costo de ordenamiento.
+        \item +3 Declaración e inicialización de totalPiezas y una obtención.
+        \item +3 Declaraciones de volumenPieza, i, cantidadVolumen.
+        \item +1 Declaración de mismoVolumen.        
+        \item +1 asignación a i.
+    \end{itemize}
+    \item Inicia primer mientras (puede que itere una vez por cada Pieza en la lista, por lo que multiplica el costo en n).
+    \begin{itemize}
+        \item +1 chequeo condicion de iteracion
+        \item +2 asignacion a volumenPieza y obtencion.
+        \item +1 asignacion a cantidadVolumen.
+        \item +1 asignacion a mismoVolumen.
+        \item +2 suma y asignacion a i.
+    \end{itemize}
+    \item Inicia segundo mientras (Utiliza el mismo iterador i que el primer mientras, por lo que no se recorre la lista más de una vez entre ambos).
+    \begin{itemize}
+        \item +2 condicion primer si, comparación y obtencion.
+    \end{itemize}
+    \item Entra a primer si.
+    \begin{itemize}
+        \item +2 suma y asignación a cantidadVolumen.
+        \item +2 suma y asignación a i.        
+    \end{itemize}
+    \item No entra a primer si, pasa a primer sino.
+    \begin{itemize}
+        \item +2 condición segundo si, comparación y techo.
+    \end{itemize}
+    \item entra a segundo si.
+    \begin{itemize}
+        \item +1 retorno.
+    \end{itemize}
+    \item No entra a segundo si, pasa a segundo sino.
+    \begin{itemize}
+        \item +1 asignación.
+    \end{itemize}
+    \item Termina segundo mientras. termina primer mientras.
+    \begin{itemize}
+        \item +1 retorna indicador de que no se halló elemento mayoritario
+    \end{itemize}
+
+\end{itemize}
+
+Definimos T(n), función de complejidad temporal:
+
+\begin{equation}
+    T(n) = n*log(n) + 8 + n*( 7 + 6 ) - 1 = n*log(n) + 13n + 7 = 13n*log(n) + 7
+\end{equation}
+
+
+La asignación de costo en la definición previa de \(T(n)\) se define según el peor caso posible. Dentro del segundo Mientras, hay dos si que separan posibles casos. La iteración más costosa es entrar al primer si y seguir iterando dentro del mismo Mientras. Esto implica que el peor caso según costo es el mismo que para el algoritmo A. \(n\) es impar y se tienen dos subconjuntos de \(n/2\) elementos (división entera) y un elemento más denominado \(m\). 
+Cada subconjunto contiene elementos del mismo peso (distinto peso entre subconjuntos) y m tiene cualquier otro peso, distinto al de cualquiera de los demás elementos. Esta distribución de volumen asegurará la mayor cantidad de iteraciones seguidas dentro del segundo Mientras, sin obtener un elemento mayoritario.
+El \(-1\) se debe a la diferencia \((6 - 5)\) de operaciones entre una iteración corriente entre cualquier elemento de los subconjuntos y la iteración del elemento m. Estas iteraciones son dentro del segundo Mientras.
+
+Por lo tanto, obviando constantes y coeficientes, queda que \(T(n)\) pertenece a la cota \(O(n*log(n))\)
+
+El recorrer la lista, cada elemento se visita una vez y en el peor de los casos va a recorrer la lista completa con n elementos. Entonces podemos decir que es de orden \(O(n)\). 
+Pero debido al ordenamiento, la complejidad total es \(T(n) = O(n log n)\), siendo óptimo el algoritmo de ordenamiento. El ordenamiento debe tenerse en cuenta en la complejidad del algoritmo, ya que, es necesario para el correcto funcionamiento del mismo.
+
+Como observación aparte, otra posibilidad de implementar el proceso “B” es la siguiente: en caso de haber elemento mayoritario, éste debe encontrarse necesariamente en la posición \((n+1)/2\).  Entonces es posible recorrer la lista desde ese elemento hacia atrás y hacia delante, contando cuántas veces que se repite ese volumen. 
+Si la cantidad es mayor que \(n/2\), ese será el elemento mayoritario. 
+De todos modos, la complejidad de este algoritmo sigue estando atada a la complejidad del algoritmo de ordenamiento que se utilice, por lo que no representa ninguna mejora respecto al algoritmo presentado como proceso “B”.
+
+
+Respecto de la complejidad espacial:
+
+\begin{itemize}
+    \item +n*size(Pieza), espacio ocupado por listaPiezas que contiene n elementos Pieza.
+    \item +4*size(int), espacio ocupado por totalPiezas, volumenPieza, i y cantidadVolumen.
+    \item +1 byte (1*size(bool)), espacio ocupado por mismoVolumen.
+\end{itemize}
+
+Por lo tanto, se tiene que E(n), función de espacio total ocupado por la ejecución del algoritmo es:
+
+\begin{equation}
+    E(n) = n*size(Pieza) + 4*size(int) + 1 => E(n) = O(n)    
+\end{equation}
+
 \newpage
 \subsection{Proceso C}
 \subsubsection{Descripción}
