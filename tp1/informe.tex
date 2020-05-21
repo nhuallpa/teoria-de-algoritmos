@@ -617,24 +617,25 @@ El valor de \(K\) llega a su maximo cuando todos los elementos son igual osea qu
 \end{equation}
 
 
-Si aplicamos el teorema del maestro con el caso 3 para a=1, b=2 y f(n)=n, calculamos:
+Si aplicamos el teorema del maestro con el \textit{caso 3} para \(a=1\), \(b=2\) y \(f(n)=n\), calculamos:
 
 \[
-    f(n) =  O(n^(logb(a) + e)) con e>0
+    f(n) = O(n^{(logb(a) + e)}) 
 \]
+Con \(e>0\). Entonces:
 
 \[
-    n =  Omega(n^log2(1) + e) = n^0 + e  si e=1 
+    n =  \Omega(n^{log_2(1) + e} ) = n^{0 + e}
 \]
-Con lo cual se cumple la primer condición condición y ahora busco un c para que se cumpla \(a*f(n/b) <= c*f(n)\) con \(c < 1\) y \(n>>\) reemplazando por a y b:
+Con lo cual si e=1 se cumple la primer condición condición. Ahora busco un \(c\) para que se cumpla \(a*f(n/b) <= c*f(n)\) con \(c < 1\) y \(n>>\) reemplazando por \(a\) y \(b\):
 
 \[
-    1*n/2 <= c * n    
+    1*n/2 \leq c * n    
 \]
 
-con lo cual con \(c=1/2\) se cumple la segunda condición y por lo tanto \(T(n) = \Theta(n)\)
+Entonces si \(c=1/2\) se cumple la segunda condición y por lo tanto \(T(n) = \Theta(n)\)
 
-La \textbf{complejidad espacial} es \(O(n)\) debido a que el arreglo de elemento se va reduciendo de \(n/i*2\) con \(i > 0\) hasta que quede un elemento. 
+La \textbf{complejidad espacial} es \(O(n)\) debido a que el arreglo de elemento se va reduciendo de \( \frac{n}{2*i} \) con \(i > 0\) hasta que quede un elemento. 
 En el peor de los casos pueden haber varios arreglos en memoria que sumados estarian acotados por \(2n\). 
 Con lo cual la complejidad seria \(O(n)\).
 
@@ -648,6 +649,12 @@ Con lo cual la complejidad seria \(O(n)\).
 
 Como se ve en la tabla, aunque todos tengan la misma complejidad espacial, el Algoritmo C supera a los demás, ya que es óptimo temporalmente.
 
+
+\section{Instrucciones para el código fuente}
+
+
+El archivo .zip que se presenta contiene una carpeta por cada tipo de Proceso que se ha implementando (“A”, “B” y “C”). En cada carpeta se encuentra un archivo con el rótulo “Instrucciones Algoritmo” en donde se indican los requisitos y procedimientos para su compilación y ejecución. 
+También se pone a disposición el archivo piezas.txt con un posible lote de piezas que analizará el algoritmo implementado.
 
 
 \end{document}
