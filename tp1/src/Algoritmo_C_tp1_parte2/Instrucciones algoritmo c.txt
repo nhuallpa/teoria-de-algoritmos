@@ -1,0 +1,17 @@
+Instrucciones algoritmo C
+
+Para compilar en terminal, utilizar la siguiente línea de código, estando en el directorio con los archivos del programas. "Algoritmo_C_tp1_parte2" debería ser la nomenclatura de la carpeta presentada en el zip:
+
+
+
+Para ejecutar el programa, escriba la siguiente línea de código en la terminal, en el mismo directorio que la acción previa:
+
+./AlgoritmoC
+
+Esto funcionará, considerando que esté instalado gcc con g++ en la computadora. La línea funciona en ubuntu 18.04.
+
+Puede probrar el programa en codeblocks abriendo el archivo Algoritmo_C_tp1_parte2.cbp
+
+Considere que su archivo de texto, el cual contiene los volúmenes de las piezas, debe seguir las consideraciones presentadas en la consigna del tp1 y en las precondiciones de la función cargar archivo, presente en la biblioteca "algoritmo_c_funciones.h".
+
+Ya se provee un archivo "piezas.txt". Se recomienda modificarlo para probar con distintos conjuntos de piezas. Las modificaciones no deben diferir de la sintaxis de texto para dicho archivo, presentes en la consigna del tp1.

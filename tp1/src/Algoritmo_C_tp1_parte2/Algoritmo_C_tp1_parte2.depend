@@ -1,0 +1,27 @@
+# depslib dependency file v1.0
+1590007749 source:/home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/algoritmo_c_funciones.cpp
+	"algoritmo_c_funciones.h"
+	<fstream>
+	<iostream>
+
+1590004362 /home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/algoritmo_c_funciones.h
+	"lista_enteros.h"
+
+1590002090 source:/home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/AlgoritmoC_main.cpp
+	"algoritmo_c_funciones.h"
+	<iostream>
+	"lista_enteros.h"
+
+1590002681 /home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/lista_enteros.h
+	"nodo_entero.h"
+
+1572996274 /home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/nodo_entero.h
+
+1590002658 source:/home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/lista_enteros.cpp
+	"nodo_entero.h"
+	"lista_enteros.h"
+	<iostream>
+
+1573773777 source:/home/mateo/programacion/C++/experimentos/Algoritmo_C_tp1_parte2/nodo_entero.cpp
+	"nodo_entero.h"
+

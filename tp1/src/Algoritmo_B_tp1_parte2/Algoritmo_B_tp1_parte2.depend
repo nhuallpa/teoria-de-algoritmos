@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1589931395 source:/home/mateo/programacion/C++/experimentos/Algoritmo_B_tp1_parte2/Algoritmo_b_funciones.cpp
+	"Algoritmo_b_funciones.h"
+	<fstream>
+	<iostream>
+
+1589931645 /home/mateo/programacion/C++/experimentos/Algoritmo_B_tp1_parte2/Algoritmo_b_funciones.h
+
+1589931470 source:/home/mateo/programacion/C++/experimentos/Algoritmo_B_tp1_parte2/AlgoritmoB_main.cpp
+	"Algoritmo_b_funciones.h"
+

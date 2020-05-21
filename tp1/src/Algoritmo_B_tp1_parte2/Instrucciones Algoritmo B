@@ -1,0 +1,17 @@
+Instrucciones de uso, algoritmo B
+
+Linea de compilación por terminal en ubuntu (funciona en version 18.04, por lo menos), asegurarse de estar en el directorio con los archivos del programa:
+
+g++ -Wall AlgoritmoB_main.cpp Algoritmo_b_funciones.cpp -o AlgoritmoB
+
+Línea de ejecución, asegurarse de que se este con la terminal en el directorio con los archivos del programa:
+
+./AlgoritmoB
+
+Esto funcionará, considerando que esté instalado gcc con g++ en la computadora.
+
+Puede probrar el programa en codeblocks abriendo el archivo Algoritmo_B_tp1_parte2.cbp
+
+Considere que su archivo de texto, el cual contiene los volúmenes de las piezas, debe seguir las consideraciones presentadas en la consigna del tp1 y en las precondiciones de la función cargar archivo, presente en la biblioteca "Algoritmo_b_funciones.h". Para aclarar, asegúrese de que el archivo "piezas.txt" esté en el mismo directorio que los demás archivos del programa.
+
+Ya se provee un archivo "piezas.txt". Se recomienda modificarlo para probar con distintos conjuntos de piezas. Las modificaciones no deben diferir de la sintaxis de texto establecidas para dicho archivo, presentes en la consigna del tp1.
