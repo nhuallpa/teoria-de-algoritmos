@@ -18,7 +18,7 @@ public:
 
     static void mostrarAyuda();
 
-    std::vector<int> cargarPiezas(std::string rutaArchivo);
+    static std::vector<int> cargarPiezas(std::string rutaArchivo);
 
 };
 #endif //MAYORITARIO_UTIL_H

@@ -3,13 +3,11 @@
 //
 
 #include <iostream>
-#include "Utils/Utils.h"
-#include "ProcesoC/AlgoritmoC.h"
-#include "ProcesoB/AlgoritmoB.h"
-#include "ProcesoA/AlgoritmoA.h"
-#include "Lista/lista_enteros.h"
-#include "Utils.h"
 #include <fstream>
+#include <stdexcept>
+#include "Utils/Utils.h"
+
+using namespace std;
 
 t_parametros Utils::tomarParametros(int argc, char **argv) {
     int c;
@@ -69,7 +67,11 @@ std::vector<int> Utils::cargarPiezas(std::string rutaArchivo) {
     }
     string volumen;
     while (archivo >> volumen) {
-        piezas.push_back(stoi(volumen));
+        try {
+            piezas.push_back(stoi(volumen));
+        } catch (exception &e) {
+            throw invalid_argument("El formato del archivo es incorrecto. Solo debe contener numeros.");
+        }
     }
     archivo.close();
 

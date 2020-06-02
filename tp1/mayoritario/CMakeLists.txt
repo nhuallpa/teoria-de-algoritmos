@@ -14,6 +14,7 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoA")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoB")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoC")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/Utils")
+add_subdirectory("${PROJECT_SOURCE_DIR}/src/SistemaMayoritario")
 
 add_executable(mayoritario ${SOURCE} ${HEADERS})
 
