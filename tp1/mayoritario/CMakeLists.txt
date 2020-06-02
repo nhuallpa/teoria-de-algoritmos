@@ -13,6 +13,7 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/src/Lista")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoA")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoB")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/ProcesoC")
+add_subdirectory("${PROJECT_SOURCE_DIR}/src/Utils")
 
 add_executable(mayoritario ${SOURCE} ${HEADERS})
 
