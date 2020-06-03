@@ -264,40 +264,36 @@ En ese caso el rótulo deberá ser ese valor. De lo contrario el lote se descart
 Actualmente cuentan con el proceso “A” que consiste en para cada pieza del lote contar cuantas de las restantes tienen el mismo volumen. 
 Si alguna de las piezas corresponde al “elemento mayoritario”, lo rotula. De lo contrario lo rechaza.
 
-\subsubsection{Pseudocódigo}
+\newpage
+\subsubsection{Pseudocódigo del proceso A}
 
 \begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
-int elementoMayoritario(list[pieza] listaPiezas)
-	int totalPiezas = listaPiezas.contar();
-	int volumenPieza, i, piezaActual, cantidadVolumen;
-	piezaActual = 0;
+Dado un listado L de volumenes de piezas por cada item en un lote y de n elementos.
 
-	Mientras piezaActual < totalPiezas
-        volumenPieza= listaPiezas(piezaActual).volumen;
-        cantidadVolumen = 1;
-		i = 0;
-		
-		Mientras listaPiezas != fin
+mayoritario = 0
 
-			Si(piezaActual != i && listaPiezas(i).volumen == volumenPieza)
-				cantidadVolumen ++;
-			i++;
+Por cada volumen v en L
+    
+    piezas_iguales = 0
 
-		Fin Mientras
-			
-        Si(cantidadVolumen >techo(totalPiezas/2)) 
-		    Retornar volumenPieza;
-        Sino
-            piezaActual++;
-        FinSi
+    Por cada volumen v' en L
 
-    Fin Mientras
+        si v == v' entonces 
+            piezas_iguales = piezas_iguales + 1
+        fin si
 
-Retornar 0; 
+        si piezas_iguales >  n/2 entonces
+            mayoritario = v
+        fin si
+
+    fin mientras
+fin mientras
+
+retornar mayoritario
 
 \end{lstlisting}
 
-\subsubsection{Analisis del algoritmo}
+\subsubsection{Analisis del algoritmo del proceso A}
 
 Consideramos la unidad (1) de complejidad temporal como el tiempo de ejecución de una operación elemental (suma, asignación, etc). 
 Y por otro lado, consideramos la unidad (1) de complejidad espacial como un byte. Y por último \(n\) el tamaño de la lista de piezas que guarda todas las piezas.

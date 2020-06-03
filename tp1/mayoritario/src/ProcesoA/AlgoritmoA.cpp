@@ -1,28 +1,26 @@
 #include"AlgoritmoA.h"
-
 #include <vector>
 namespace ProcesoA {
 
     const int ELEMENTO_NO_HALLADO = 0;
 
     int obtener_elemento_mayoritario(std::vector<int> piezas) {
-
-        int volumenPieza = ELEMENTO_NO_HALLADO;
-        int cantidadPiezasIguales = 0;
-
+        int volumenMayoritario = ELEMENTO_NO_HALLADO;
         for (auto indicePiezaActual = piezas.begin(); indicePiezaActual != piezas.end(); indicePiezaActual++) {
-            volumenPieza = *indicePiezaActual;
+            float cantidadPiezasIguales = 0;
+            int volumenPieza = *indicePiezaActual;
+
             for (auto indiceOtraPieza = piezas.begin(); indiceOtraPieza != piezas.end(); indiceOtraPieza++) {
-                if (indicePiezaActual != indiceOtraPieza &&  volumenPieza == *indiceOtraPieza) {
+                if (volumenPieza == *indiceOtraPieza) {
                     cantidadPiezasIguales++;
                 }
             }
 
-            if (cantidadPiezasIguales > piezas.size() / 2) {
-               break;
+            if (cantidadPiezasIguales > (float)piezas.size() / 2) {
+                volumenMayoritario = volumenPieza;
             }
         }
-        return volumenPieza;
+        return volumenMayoritario;
     }
 
 }

@@ -30,15 +30,9 @@ int SistemaMayoritario::ejecutar(int argc, char **argv) {
 }
 
 
-void SistemaMayoritario::ejecutarProcesoC(t_parametros parametros) {
-    Lista_enteros piezas;
-    Lista_enteros* ptr_piezas = &piezas;
-
-    ProcesoC::cargar_piezas(ptr_piezas);
-
-    int elemento_mayoritario = ProcesoC::obtener_elemento_mayoritario(ptr_piezas);
-
-    ProcesoC::mostrar_resultado(elemento_mayoritario);
+int SistemaMayoritario::ejecutarProcesoA(t_parametros parametros) {
+    std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
+    return ProcesoA::obtener_elemento_mayoritario(piezas);
 }
 
 void SistemaMayoritario::ejecutarProcesoB(t_parametros parametros) {
@@ -57,9 +51,15 @@ void SistemaMayoritario::ejecutarProcesoB(t_parametros parametros) {
     delete []piezas;
 }
 
-int SistemaMayoritario::ejecutarProcesoA(t_parametros parametros) {
-    std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
-    return ProcesoA::obtener_elemento_mayoritario(piezas);
+void SistemaMayoritario::ejecutarProcesoC(t_parametros parametros) {
+    Lista_enteros piezas;
+    Lista_enteros* ptr_piezas = &piezas;
+
+    ProcesoC::cargar_piezas(ptr_piezas);
+
+    int elemento_mayoritario = ProcesoC::obtener_elemento_mayoritario(ptr_piezas);
+
+    ProcesoC::mostrar_resultado(elemento_mayoritario);
 }
 
 void SistemaMayoritario::encontrarMayoritario() {

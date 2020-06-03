@@ -1,7 +1,6 @@
 #ifndef ALGORITMO_A_FUNCIONES_H_INCLUDED
 #define ALGORITMO_A_FUNCIONES_H_INCLUDED
 
-#include"Lista/lista_enteros.h"
 #include <vector>
 
 using namespace std;
