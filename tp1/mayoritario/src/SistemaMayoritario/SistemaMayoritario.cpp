@@ -29,46 +29,34 @@ int SistemaMayoritario::ejecutar(int argc, char **argv) {
     return 0;
 }
 
-
+// TODO: REFACTORIZAR A ESTRATEGY SI HAY TIEMPO
 int SistemaMayoritario::ejecutarProcesoA(t_parametros parametros) {
     std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
     return ProcesoA::obtener_elemento_mayoritario(piezas);
 }
 
-void SistemaMayoritario::ejecutarProcesoB(t_parametros parametros) {
-    int* cargador_piezas = new int [ProcesoB::MAX_TAMANIO_VECTOR];
-
-    int total_piezas = ProcesoB::cargar_piezas(cargador_piezas);
-
-    int* piezas = ProcesoB::asegurar_vector_completo(cargador_piezas, total_piezas);
-
-    delete []cargador_piezas;
-
-    int elemento_mayoritario = ProcesoB::obtener_elemento_mayoritario(piezas, total_piezas);
-
-    ProcesoB::mostrar_resultado(elemento_mayoritario);
-
-    delete []piezas;
+int SistemaMayoritario::ejecutarProcesoB(t_parametros parametros) {
+    std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
+    return ProcesoB::obtener_elemento_mayoritario(piezas);
 }
 
-void SistemaMayoritario::ejecutarProcesoC(t_parametros parametros) {
+int SistemaMayoritario::ejecutarProcesoC(t_parametros parametros) {
     Lista_enteros piezas;
     Lista_enteros* ptr_piezas = &piezas;
 
     ProcesoC::cargar_piezas(ptr_piezas);
 
-    int elemento_mayoritario = ProcesoC::obtener_elemento_mayoritario(ptr_piezas);
-
-    ProcesoC::mostrar_resultado(elemento_mayoritario);
+    return ProcesoC::obtener_elemento_mayoritario(ptr_piezas);
 }
 
+// TODO: REFACTORIZAR A FACTORY METHOD
 void SistemaMayoritario::encontrarMayoritario() {
     if (parametros.tipoProceso.compare(PROCESO_A) == 0 ) {
         elementoMayotario = ejecutarProcesoA(parametros);
     } else if (parametros.tipoProceso.compare(PROCESO_B) == 0 ) {
-        ejecutarProcesoB(parametros);
+        elementoMayotario = ejecutarProcesoB(parametros);
     } else if (parametros.tipoProceso.compare(PROCESO_C) == 0 ) {
-        ejecutarProcesoC(parametros);
+        elementoMayotario = ejecutarProcesoC(parametros);
     } else {
         throw invalid_argument("El parametro '-p' de tipo de proceso es incorrecto");
     }

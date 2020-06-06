@@ -20,5 +20,4 @@ add_executable(mayoritario ${SOURCE} ${HEADERS})
 
 target_link_libraries(mayoritario ProcesoA_lib ProcesoB_lib ProcesoC_lib SistemaMayoritario_lib)
 
-#add_subdirectory("${PROJECT_SOURCE_DIR}/tests")
 add_subdirectory(tests)

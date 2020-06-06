@@ -19,8 +19,8 @@ private:
     int elementoMayotario = 0;
 
     int ejecutarProcesoA(t_parametros parametros);
-    void ejecutarProcesoC(t_parametros parametros);
-    void ejecutarProcesoB(t_parametros parametros);
+    int ejecutarProcesoB(t_parametros parametros);
+    int ejecutarProcesoC(t_parametros parametros);
     void encontrarMayoritario();
     void mostrarElementoMayoritario();
     void validarOpciones();

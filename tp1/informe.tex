@@ -364,35 +364,30 @@ En este proceso se tiene en cuenta que se debe ordenar las piezas por volumen y 
 
 \begin{lstlisting}[language=Python, caption=Algoritmo del proceso B]
 
-int elementoMayoritario(list[pieza] listaPiezas)
+Dado un listado L de volumenes de piezas por cada item en un lote y de n elementos.
 
-    Ordenar(listaPiezas)
-    int totalPiezas = listaPiezas.contar()
-    int volumenPieza, i, cantidadVolumen
-    bool mismoVolumen
-    i = 0
+Ordenar L de menor a mayor
 
-    Mientras i < totalPiezas
-        volumenPieza= listaPiezas(i).volumen
-        cantidadVolumen = 1
-        mismoVolumen = TRUE
-        i++
+piezas_iguales = 1
+mayoritario = 0
+i = 0
 
-        Mientras listaEmpleados != fin && mismoVolumen
-            Si(listaEmpleados(i).volumen == volumenPieza)
-                cantidadVolumen ++
-                i++
-            Sino
-                Si(cantidadVolumen > techo(totalPiezas/2))
-                    Retornar volumenPieza
-                Sino
-                    mismoVolumen = FALSE
-                FinSi
-            FinSi
-        FinMientras
-    FinMientras
-	
+Mientras i < n -1 
+    
+    si v[i] == v[i+1] entonces 
+        piezas_iguales = piezas_iguales + 1
+    sino
+        piezas_iguales = 1
+    fin si
+
+    si piezas_iguales >  n/2 entonces
+        Retornar v[i]
+    fin si
+
+fin mientras
+
 Retornar 0
+
 
 \end{lstlisting}
 

@@ -118,44 +118,4 @@ namespace ProcesoC {
 
     }
 
-
-    void mensaje_con_elemento_mayoritario(int elemento_mayoritario) {
-
-        cout << "elemento mayoritario " << elemento_mayoritario << "." << endl;
-        cout << "Tenga un buen día." << endl;
-
-    }
-
-    void mensaje_no_elemento_mayoritario() {
-
-        cout << "no hay elemento mayoritario." << endl;
-        cout << "Tenga una buena tarde." << endl;
-
-    }
-
-    //Uno más ¿Porqué no?.
-
-    void mensaje_oculto() {
-
-        cout << "Tenga una buena madrugada" << endl;
-
-    }
-
-    void mostrar_resultado(int elemento_mayoritario) {
-
-        if ((elemento_mayoritario != MAYORITARIO_NO_HALLADO) && (elemento_mayoritario != ELEMENTO_SORPRESA))
-
-            mensaje_con_elemento_mayoritario(elemento_mayoritario);
-
-        else if (elemento_mayoritario == MAYORITARIO_NO_HALLADO)
-
-            mensaje_no_elemento_mayoritario();
-
-        else
-
-            mensaje_oculto();
-
-    }
-
-
 }

@@ -36,3 +36,12 @@ TEST(MayoritarioFixture, SiLaCantidadElementosEsImParYNOExisteUnMayoritarioNOSeE
     EXPECT_EQ(0, mayoritario) << "No tiene que haber elemento mayoritario";
 
 }
+
+TEST(MayoritarioFixture, SiLaCantidadElementosEsImParYNOExisteUnMayoritarioNOSeEncuentraEnPeorCaso) {
+
+    std::vector<int> piezas = {10,20,30,40,50};
+
+    int mayoritario = ProcesoA::obtener_elemento_mayoritario(piezas);
+    EXPECT_EQ(0, mayoritario) << "No tiene que haber elemento mayoritario";
+
+}
