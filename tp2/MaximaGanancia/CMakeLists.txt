@@ -9,10 +9,11 @@ set(SOURCE
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/Utils")
 add_subdirectory("${PROJECT_SOURCE_DIR}/src/Producto")
+add_subdirectory("${PROJECT_SOURCE_DIR}/src/SeleccionadorProductos")
 
 add_executable(MaximaGanancia ${SOURCE} ${HEADERS})
 
-target_link_libraries(MaximaGanancia Producto_lib)
+target_link_libraries(MaximaGanancia Producto_lib SeleccionadorProductos_lib)
 
 
 add_subdirectory(tests)

@@ -15,7 +15,9 @@ private:
     int ganancia;
 public:
 
+    Producto(const string &nombre, int trimestre, int ganancia);
 
+    int getGanancia() const;
 };
 
 
