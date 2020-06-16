@@ -25,7 +25,7 @@ t_parametros Utils::tomarParametros(int argc, char **argv) {
         /* getopt_long stores the option index here. */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "p:a:",
+        c = getopt_long(argc, argv, "p:r:",
                         long_options, &option_index);
 
         /* Detect the end of the options. */
@@ -36,7 +36,7 @@ t_parametros Utils::tomarParametros(int argc, char **argv) {
             case 'p':
                 params.productosArchivo = optarg;
                 break;
-            case 'a':
+            case 'r':
                 params.restriccionesArchivo = optarg;
                 break;
             case '?':
@@ -58,22 +58,69 @@ void Utils::mostrarAyuda() {
 
 std::vector<Producto> Utils::cargarProductos(std::string rutaArchivo) {
 
-    std::vector<int> piezas;
+    std::vector<Producto> productos;
+    Producto productoBase("", 0, 0);
+    productos.push_back(productoBase);
 
     ifstream archivo;
     archivo.open(rutaArchivo.c_str(), std::ifstream::in);
     if (!archivo.is_open()) {
         throw invalid_argument("El archivo no se pudo abrir");
     }
-    string volumen;
-    while (archivo >> volumen) {
+    string lineaProducto;
+    while (std::getline(archivo, lineaProducto)) {
         try {
-            piezas.push_back(stoi(volumen));
+            vector<string> campos = split(lineaProducto, ",");
+            // validar longitud y tipo de datos en campos
+            Producto unProducto(campos.at(0),atoi(campos.at(1).c_str()),atoi(campos.at(2).c_str()));
+            productos.push_back(unProducto);
         } catch (exception &e) {
-            throw invalid_argument("El formato del archivo es incorrecto. Solo debe contener numeros.");
+            throw invalid_argument("El formato del archivo de PRODUCTOS es incorrecto.");
         }
     }
     archivo.close();
 
-    return piezas;
+    return productos;
+}
+
+
+std::map<string, string> Utils::cargarRestricciones(std::string rutaArchivo) {
+
+    std::map<string, string> restricciones;
+
+    ifstream archivo;
+    archivo.open(rutaArchivo.c_str(), std::ifstream::in);
+    if (!archivo.is_open()) {
+        throw invalid_argument("El archivo no se pudo abrir");
+    }
+    string linea;
+    while (std::getline(archivo, linea)) {
+        try {
+            vector<string> campos = split(linea, ",");
+            // validar longitud y tipo de datos en campos
+            restricciones[campos.at(0)] = campos.at(1);
+        } catch (exception &e) {
+            throw invalid_argument("El formato del archivo de RESTRICCIONES es incorrecto.");
+        }
+    }
+    archivo.close();
+
+    return restricciones;
+}
+
+std::vector<std::string> Utils::split(const std::string &str, const std::string &delim) {
+
+    vector<string> tokens;
+    size_t prev = 0, pos = 0;
+    do
+    {
+        pos = str.find(delim, prev);
+        if (pos == string::npos) pos = str.length();
+        string token = str.substr(prev, pos-prev);
+        if (!token.empty()) tokens.push_back(token);
+        prev = pos + delim.length();
+    }
+    while (pos < str.length() && prev < str.length());
+    return tokens;
+
 }

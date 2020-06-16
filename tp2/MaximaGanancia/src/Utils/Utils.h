@@ -3,6 +3,7 @@
 #include <string>
 #include <getopt.h>
 #include <vector>
+#include <map>
 #include "Producto/Producto.h"
 
 using std::string;
@@ -19,7 +20,11 @@ public:
 
     static void mostrarAyuda();
 
-    static std::vector<int> cargarProductos(std::string rutaArchivo);
+    static std::vector<Producto> cargarProductos(std::string rutaArchivo);
+    static std::map<string, string> cargarRestricciones(std::string rutaArchivo);
+
+
+    static std::vector<std::string> split(const std::string& str, const std::string& delim);
 
 };
 #endif //MAYORITARIO_UTIL_H

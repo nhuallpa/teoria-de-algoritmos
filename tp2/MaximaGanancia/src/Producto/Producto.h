@@ -6,6 +6,8 @@
 #define MAXIMAGANANCIA_PRODUCTO_H
 
 #include <string>
+#include <ostream>
+
 using std::string;
 
 class Producto {
@@ -26,6 +28,8 @@ public:
     bool mismoNombre(string otroNombre);
 
     bool mismoTrimestre(const Producto & otroProducto);
+
+    friend std::ostream &operator<<(std::ostream &os, const Producto &producto);
 };
 
 

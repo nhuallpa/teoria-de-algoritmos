@@ -8,14 +8,10 @@ using namespace std;
 int SistemaProductos::ejecutar(int argc, char **argv) {
 
     try {
-
         this->parametros = Utils::tomarParametros(argc, argv);
-
-        vector<Producto> &productos =
-                std::map<string, string> &restricciones;
-
-        SeleccionadorProductos seleccionadorProductos()
-
+        SeleccionadorProductos seleccionadorProductos(Utils::cargarProductos(parametros.productosArchivo),
+                                                      Utils::cargarRestricciones(parametros.restriccionesArchivo));
+        mostrarResultados(seleccionadorProductos.seleccionar());
 
     } catch (exception & e) {
         cout<<e.what()<<endl;
@@ -24,4 +20,14 @@ int SistemaProductos::ejecutar(int argc, char **argv) {
     }
 
     return 0;
+}
+
+void SistemaProductos::mostrarResultados(const vector<Producto> &productosSeleccionados) const {
+    int gananciaMaxima = 0;
+    cout << "Productos seleccionados:" << endl;
+    for (const auto &producto : productosSeleccionados) {
+        cout << "*" << producto << endl;
+        gananciaMaxima += producto.getGanancia();
+    }
+    cout << "* GANANCIA:" << gananciaMaxima << endl;
 }

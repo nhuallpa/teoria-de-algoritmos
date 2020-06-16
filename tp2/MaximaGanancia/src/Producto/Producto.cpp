@@ -27,3 +27,8 @@ bool Producto::mismoTrimestre(const Producto &otroProducto) {
     return this->trimestre == otroProducto.trimestre;
 }
 
+std::ostream &operator<<(std::ostream &os, const Producto &producto) {
+    os << "nombre: " << producto.nombre << " trimestre: " << producto.trimestre << " ganancia: " << producto.ganancia;
+    return os;
+}
+

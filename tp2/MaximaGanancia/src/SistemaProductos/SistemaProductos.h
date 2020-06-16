@@ -15,6 +15,7 @@ private:
 public:
     int ejecutar(int argc, char **argv);
 
+    void mostrarResultados(const vector<Producto> &productosSeleccionados) const;
 };
 
 
