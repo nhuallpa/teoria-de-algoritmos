@@ -7,13 +7,29 @@
 
 #include "Producto/Producto.h"
 #include <vector>
-
+#include <map>
 using std::vector;
+using std::map;
 
 class SeleccionadorProductos {
 
+private:
+    vector<Producto> productos;
+    std::map<string, string> restricciones;
+
 public:
-    static vector<Producto> seleccionarConMejorGanancia(std::vector<Producto> vector);
+    SeleccionadorProductos(const vector<Producto> &productos, const std::map<string, string> &restricciones);
+
+public:
+    /**
+     * Selecciona los productos que maximicen la ganancia.
+     * @param productos
+     * @param restricciones Un mapa donde indica que el producto A no podemos plantar el producto B. <code>restricciones[A]=B</code>
+     * @return
+     */
+    vector<Producto> seleccionar();
+
+    map<int, int> calcularAnteriorePosibles();
 };
 
 

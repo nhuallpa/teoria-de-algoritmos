@@ -11,3 +11,19 @@ int Producto::getGanancia() const {
     return ganancia;
 }
 
+const string &Producto::getNombre() const {
+    return nombre;
+}
+
+int Producto::getTrimestre() const {
+    return trimestre;
+}
+
+bool Producto::mismoNombre(string otroNombre) {
+    return this->nombre.compare(otroNombre) == 0;
+}
+
+bool Producto::mismoTrimestre(const Producto &otroProducto) {
+    return this->trimestre == otroProducto.trimestre;
+}
+

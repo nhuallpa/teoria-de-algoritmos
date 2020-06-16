@@ -18,6 +18,14 @@ public:
     Producto(const string &nombre, int trimestre, int ganancia);
 
     int getGanancia() const;
+
+    const string &getNombre() const;
+
+    int getTrimestre() const;
+
+    bool mismoNombre(string otroNombre);
+
+    bool mismoTrimestre(const Producto & otroProducto);
 };
 
 

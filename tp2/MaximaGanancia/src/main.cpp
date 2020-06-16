@@ -1,6 +1,8 @@
 #include <iostream>
+#include "SistemaProductos/SistemaProductos.h"
+int main(int argc, char* argv[]) {
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+    SistemaProductos sistemasProductos;
+    return sistemasProductos.ejecutar(argc, argv);
+
 }

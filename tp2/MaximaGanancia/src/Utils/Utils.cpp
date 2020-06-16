@@ -13,13 +13,13 @@ t_parametros Utils::tomarParametros(int argc, char **argv) {
     int c;
     bool pendingParams = true;
     t_parametros params;
-    params.tipoProceso = ' ';
+    params.productosArchivo = ' ';
 
     while (pendingParams) {
         static struct option long_options[] =
                 {
-                        {"proceso", required_argument, nullptr, 'p'},
-                        {"archivo", required_argument, nullptr, 'a'},
+                        {"productos", required_argument, nullptr, 'p'},
+                        {"restricciones", required_argument, nullptr, 'r'},
                         {0, 0, 0, 0}
                 };
         /* getopt_long stores the option index here. */
@@ -34,10 +34,10 @@ t_parametros Utils::tomarParametros(int argc, char **argv) {
 
         switch (c) {
             case 'p':
-                params.tipoProceso = optarg;
+                params.productosArchivo = optarg;
                 break;
             case 'a':
-                params.rutaArchivo = optarg;
+                params.restriccionesArchivo = optarg;
                 break;
             case '?':
                 /* getopt_long already printed an error message. */
@@ -53,10 +53,10 @@ t_parametros Utils::tomarParametros(int argc, char **argv) {
 }
 
 void Utils::mostrarAyuda() {
-    cout<<"---->Ejemplo: mayoritario -p [a|b|c] -a [ruta de archivo]<----"<<endl;
+    cout<<"---->Ejemplo: MaximaGanancia -p [ruta de archivo] -r [ruta de archivo]<----"<<endl;
 }
 
-std::vector<int> Utils::cargarPiezas(std::string rutaArchivo) {
+std::vector<Producto> Utils::cargarProductos(std::string rutaArchivo) {
 
     std::vector<int> piezas;
 
