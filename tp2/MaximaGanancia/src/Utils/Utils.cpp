@@ -80,6 +80,8 @@ std::vector<Producto> Utils::cargarProductos(std::string rutaArchivo) {
     }
     archivo.close();
 
+    std::stable_sort(productos.begin(), productos.end(), comparadorDosProductos);
+
     return productos;
 }
 
@@ -108,6 +110,8 @@ std::map<string, string> Utils::cargarRestricciones(std::string rutaArchivo) {
     return restricciones;
 }
 
+
+
 std::vector<std::string> Utils::split(const std::string &str, const std::string &delim) {
 
     vector<string> tokens;
@@ -123,4 +127,13 @@ std::vector<std::string> Utils::split(const std::string &str, const std::string 
     while (pos < str.length() && prev < str.length());
     return tokens;
 
+}
+
+bool Utils::comparadorDosProductos(Producto unProducto, Producto otroProducto) {
+
+    if (!unProducto.mismoTrimestre(otroProducto)) {
+        return unProducto.getTrimestre() < otroProducto.getTrimestre();
+    }
+
+    return unProducto.getGanancia() < otroProducto.getGanancia();
 }

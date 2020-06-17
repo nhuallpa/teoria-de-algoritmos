@@ -1,0 +1,2 @@
+Cebada,Maiz
+Arroz,Trigo

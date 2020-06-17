@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <map>
+#include <Utils/Utils.h>
 #include "SeleccionadorProductos.h"
 using std::vector;
 using std::map;
@@ -22,7 +23,8 @@ vector<Producto> SeleccionadorProductos::seleccionar() {
     map<int, int> anterior_posible = this->calcularAnteriorePosibles();
 
     for (int i = 2; i < productos.size(); i++) {
-        int estaSembrado = productos.at(i).getGanancia() + optimos.at(anterior_posible.at(i));
+        int gananciaOptimoAnterior = optimos.at(anterior_posible.at(i));
+        int estaSembrado = productos.at(i).getGanancia() + gananciaOptimoAnterior;
         int noEstaSembrado = optimos[i-1];
 
         elegidos[i] = estaSembrado > noEstaSembrado;

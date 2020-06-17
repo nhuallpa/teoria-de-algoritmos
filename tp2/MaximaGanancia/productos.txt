@@ -1,0 +1,5 @@
+Maiz,1,500
+Cebada,1,600
+Arroz,2,700
+Cebada,2,400
+Trigo,3,600

@@ -46,6 +46,37 @@ TEST(MaximaGananciaFixture, SiHayVariosProductosAElegirSeleccionarLosQueDenMayor
 
 }
 
+TEST(MaximaGananciaFixture, SiHayVariosProductosAElegirSeleccionarLosQueDenMayorGananciaOtroOrden) {
+
+    Producto ninguno("", 0, 0);
+    Producto maiz1("Maiz", 1, 500);
+    Producto cebada1("Cebada", 1, 600);
+    Producto cebada2("Cebada", 2, 400);
+    Producto arroz2("Arroz", 2, 700);
+    Producto trigo3("Trigo", 3, 100);
+
+    map<string, string> restricciones;
+    restricciones["Cebada"] = "Maiz";
+    restricciones["Arroz"] = "Trigo";
+
+    vector<Producto> productos = {ninguno, maiz1, cebada1, cebada2, arroz2, trigo3};
+
+    SeleccionadorProductos seleccionadorProductos(productos,restricciones);
+    vector<Producto> productosSelecionados = seleccionadorProductos.seleccionar();
+
+    int gananciaMaxima = 0;
+    for (const auto &producto : productosSelecionados) {
+        gananciaMaxima += producto.getGanancia();
+    }
+
+    EXPECT_EQ(gananciaMaxima, 1300) << "No es la ganancia maxima, se espera 1300";
+
+}
+
+
+
+
+
 TEST(MaximaGananciaFixture, ConVariosProductosYRestriccionesContruirPosiblesAnterioresOK) {
 
     Producto ninguno("", 0, 0);

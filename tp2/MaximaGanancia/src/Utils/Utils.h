@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include "Producto/Producto.h"
+#include <algorithm>
 
 using std::string;
 
@@ -23,6 +24,7 @@ public:
     static std::vector<Producto> cargarProductos(std::string rutaArchivo);
     static std::map<string, string> cargarRestricciones(std::string rutaArchivo);
 
+    static bool comparadorDosProductos(Producto unProducto, Producto otroProducto);
 
     static std::vector<std::string> split(const std::string& str, const std::string& delim);
 
