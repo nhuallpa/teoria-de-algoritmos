@@ -4,20 +4,6 @@
 #include "SeleccionadorProductos/SeleccionadorProductos.h"
 using std::vector;
 using std::map;
-TEST(MaximaGananciaFixture, SiHayUnProductoAElegirLaGananciaEsDeEseProducto) {
-
-    vector<Producto> productos;
-
-    Producto producto("Maiz", 1, 500);
-    productos.push_back(producto);
-    map<string, string> restricciones;
-
-    SeleccionadorProductos seleccionadorProductos(productos,restricciones);
-    vector<Producto> productosSelecionados = seleccionadorProductos.seleccionar();
-
-    EXPECT_EQ(productosSelecionados.at(0).getGanancia(), 500) << "Con unico producto debe devolver su misma ganancia";
-
-}
 
 TEST(MaximaGananciaFixture, SiHayVariosProductosAElegirSeleccionarLosQueDenMayorGanancia) {
 
