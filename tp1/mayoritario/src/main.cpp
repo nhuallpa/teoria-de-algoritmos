@@ -13,6 +13,6 @@
 
 int main(int argc, char* argv[]) {
     SistemaMayoritario sistemaMayoritario;
-    return sistemaMayoritario.ejecutar(argc, argv);
+    sistemaMayoritario.ejecutar(argc, argv);
 }
 

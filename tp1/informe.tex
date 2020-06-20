@@ -247,8 +247,12 @@ obtenemos que \(f(i_k) \leq f(j_k)\). Dado que \(m>k\), existe un empleado \(j_{
 Entonces, despues de eliminar todos los empleados que no son compatibles con los empleados \(i_1,...,i_k\), el conjunto de posibles empleados R aún contiene el empleado \(j_{k+1}\). 
 Pero el algoritmo de greedy se detiene con el empleado \(i_k\) y este supuestamente se detiene porque \(R\) esta vacio, lo cual es una contradicción. \(\blacksquare\)
 
-\textbf{Complejidad de algoritmo e implementación}: Si la lista no esta ordenada podemos utilizar un metodo de ordeamiento del orden \(O(n log(n))\) como el heapsort. 
-La complejidad total es O(n) si la lista ya viene ordenada. 
+\textbf{Complejidad de algoritmo e implementación}: 
+El algoritmo corre con una complejidad temporal total \(O(nlog(n))\), puesto que si la lista no esta ordenada 
+debemos utilizar un método de ordenamiento como por ejemplo el heapsort, cuya complejidad es del 
+orden \(O(n log(n))\). 
+Dado el algoritmo de greddy, al recorrer todos los intervalos una vez, gastamos un tiempo constante 
+por cada intervalo. Por lo tanto esta parte del algoritmo es \(O(n)\).
 
 \newpage
 \section{Una nueva regulación industrial}
