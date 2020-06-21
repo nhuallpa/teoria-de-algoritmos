@@ -29,7 +29,7 @@ int SistemaMayoritario::ejecutar(int argc, char **argv) {
     return 0;
 }
 
-// TODO: REFACTORIZAR A ESTRATEGY SI HAY TIEMPO
+// TODO: REFACTORIZAR A ESTRATEGIA SI HAY TIEMPO
 int SistemaMayoritario::ejecutarProcesoA(t_parametros parametros) {
     std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
     return ProcesoA::obtener_elemento_mayoritario(piezas);
@@ -41,12 +41,8 @@ int SistemaMayoritario::ejecutarProcesoB(t_parametros parametros) {
 }
 
 int SistemaMayoritario::ejecutarProcesoC(t_parametros parametros) {
-    Lista_enteros piezas;
-    Lista_enteros* ptr_piezas = &piezas;
-
-    ProcesoC::cargar_piezas(ptr_piezas);
-
-    return ProcesoC::obtener_elemento_mayoritario(ptr_piezas);
+    std::vector<int> piezas = Utils::cargarPiezas(parametros.rutaArchivo);
+    return ProcesoC::obtener_elemento_mayoritario(piezas);
 }
 
 // TODO: REFACTORIZAR A FACTORY METHOD

@@ -1,100 +1,51 @@
-#include"AlgoritmoC.h"
-#include<fstream>
-#include<iostream>
+#include "AlgoritmoC.h"
 
 namespace ProcesoC {
 
     const int MAYORITARIO_NO_HALLADO = 0;
-    const int ELEMENTO_SORPRESA = 3330;
 
-    void cargar_piezas(Lista_enteros *piezas) {
-
-        ifstream archivo("piezas.txt");
-
-        string volumen;
-
-        while (archivo >> volumen) {
-
-            piezas->alta_final(stoi(volumen));
-
-        }
-
-        archivo.close();
-
-    }
-
-    int apariciones(Lista_enteros *piezas, int volumen_buscar) {
-
+    int apariciones(std::vector<int> piezas, int volumen) {
         int cantidad = 0;
-
-        for (int i = 1; i <= (piezas->obtener_tamanio()); i++) {
-
-            if (piezas->obtener_buscado(i) == volumen_buscar) {
-
+        for ( auto it = piezas.begin(); it != piezas.end(); ++it) {
+            if (*it == volumen) {
                 cantidad++;
-
             }
-
         }
-
         return cantidad;
-
     }
 
-    Lista_enteros *hallar_pares_iguales(Lista_enteros *piezas) {
-
-        Lista_enteros *ptr_pares_iguales = new Lista_enteros;
-
-        if (piezas->obtener_tamanio() > 2) {
-
-            for (int i = 0; i <= ((piezas->obtener_tamanio() / 2) - 1); i++) {
-
-                if (piezas->obtener_buscado_v2(2 * i) == piezas->obtener_buscado_v2((2 * i) + 1)) {
-
-                    ptr_pares_iguales->alta_final(piezas->obtener_buscado_v2(2 * i));
-
+    std::vector<int> hallar_pares_iguales(std::vector<int> piezas) {
+        std::vector<int> pares_iguales;
+        if (piezas.size() > 2) {
+            for (int i = 0; i <= ((piezas.size() / 2) - 1); i++) {
+                if (piezas.at(2 * i) == piezas.at((2 * i) + 1)) {
+                    pares_iguales.push_back(piezas.at(2 * i));
                 }
-
             }
-
         } else {
-
-            ptr_pares_iguales->alta_principio(piezas->obtener_primero());
-
+            pares_iguales.push_back(piezas.at(piezas.size()-1));
         }
 
-        return ptr_pares_iguales;
+        return pares_iguales;
 
     }
 
-    int obtener_candidato(Lista_enteros *piezas) {
+    int obtener_candidato(std::vector<int> piezas) {
 
         int candidato = 0;
 
-        if ((piezas->obtener_tamanio()) == 0) {
-
+        if ((piezas.size()) == 0) {
             return candidato;
-
-        } else if ((piezas->obtener_tamanio()) == 1) {
-
-            return piezas->obtener_primero();
-
+        } else if (piezas.size() == 1) {
+            return piezas.at(0);
         } else {
+            std::vector<int> pares_iguales = hallar_pares_iguales(piezas);
+            candidato = obtener_candidato(pares_iguales);
 
-            Lista_enteros *ptr_pares_iguales = hallar_pares_iguales(piezas);
-
-            candidato = obtener_candidato(ptr_pares_iguales);
-
-            delete ptr_pares_iguales;
-
-            if ((((piezas->obtener_tamanio()) % 2) == 0) || (candidato != 0)) {
-
+            if (piezas.size() % 2 == 0 || candidato != 0) {
                 return candidato;
-
             } else {
-
-                return piezas->obtener_ultimo();
-
+                return piezas.at(piezas.size() - 1);
             }
 
         }
@@ -102,18 +53,14 @@ namespace ProcesoC {
     }
 
 
-    int obtener_elemento_mayoritario(Lista_enteros *piezas) {
+    int obtener_elemento_mayoritario(std::vector<int> piezas) {
 
-        int el_candidato = obtener_candidato(piezas);
+        int unCandidato = obtener_candidato(piezas);
 
-        if ((el_candidato == 0) || (apariciones(piezas, el_candidato) <= (piezas->obtener_tamanio() / 2))) {
-
+        if (unCandidato == 0 || (apariciones(piezas, unCandidato) <= (piezas.size() / 2))) {
             return MAYORITARIO_NO_HALLADO;
-
         } else {
-
-            return el_candidato;
-
+            return unCandidato;
         }
 
     }
