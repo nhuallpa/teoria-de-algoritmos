@@ -5,6 +5,21 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 
+\usepackage{inconsolata}
+\lstset{
+  basicstyle=\ttfamily,
+}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+
 \renewcommand{\baselinestretch}{1.2}
 
 \setlength{\parskip}{1em}
@@ -109,60 +124,76 @@ abarcar la mayor cantidad de empleados por cada encendido del sensor. El resulta
 El algoritmo funciona de la siguiente manera:
 \begin{enumerate}
     \item Ordena la lista de empleados de menor a mayor según el valor \(t_f\).
-    \item Selecciona el \(t_f\) del primer empleado de la lista \(t_{fx}\).
-    \item Elimina al empleado seleccionado y todos los demás empleados que cumplan que \(t_i \leq t_{fx} \leq t_f\), lo cual puede simplificarse y pedir que simplemente \(t_i \leq tfx\), puesto que ya se encuentra ordenado por \(t_f\) de forma ascendente.
-    \item Repite los pasos 2 y 3 hasta que ya no queden empleados en la lista.
-    \item Los \(t_{fx}\) seleccionados, son los tiempos en los cuales se debe realizar la consulta y encender el módulo DTI.
+    \item Selecciona el \(t_f\) del primer empleado de la lista de empleados y guarda el valor en \(t_{fx}\).
+    \item Añade \(t_{fx}\) a la lista de tiempos de encendido (la cual indicará en qué momentos debe encenderse el módulo DTI).
+    \item Verifica si el \(t_i\) del próximo empleado en la lista es mayor a \(t_{fx}\), si lo es guarda en \(t_{fx}\) el \(t_f\) de dicho empleado y añade \(t_{fx}\) a la lista de tiempos de encendido.
+    \item Repite el paso 4 hasta hasta terminar de recorrer la lista de empleados.
+    \item Los tiempos guardados en la lista de tiempos de encendido son los tiempos en los cuales debe encenderse el módulo DTI.
+    
 \end{enumerate}
 
 
 \subsection{Pseudocódigo del algoritmo}
 
-\begin{lstlisting}[language=Python, caption=Algoritmo de greddy para Interval Scheduling]
-
-    
+\begin{lstlisting}[language=Python, caption=Algoritmo de greddy para tiempos de encendido]
 lista[int] obtenerTiemposDeEncendido(lista[empleado] listaEmpleados)
 
-    OrdenarDeMenorAMayorPorTiempoFinal(listaEmpleados); 
+	OrdenarDeMenorAMayorPorTiempoFinal(listaEmpleados)
 
-    int Tprendido, i;
+	tiempoFin = listaEmpleados(0).obtenerTF
 
-    Mientras listaEmpleados != vacio 
+    listaTiemposEncendidos.agregar(tiempoFin)
 
-        Tprendido = listaEmpleados(0).tf; 
+	i = 1
 
-        listaTiemposEncendidos.agregar(Tprendido);
+	Mientras(listaEmpleados != fin)
 
-        listaEmpleados.remover(0); 
+		Si(listaEmpleados(i).obtenerTI > tiempoFin)
+
+			tiempoFin = listaEmpleados(i).obtenerTF
+
+	        listaTiemposEncendidos.agregar(tiempoFin)
+
+		i++
+
+Devolver listaTiemposEncendidos	
+\end{lstlisting}    
+
+
+Adicionalmente, creamos la función ConsultarDTI que recibe una lista con los tiempos en los cuales debe encenderse dicho módulo. 
+Esta función espera hasta que la hora del sistema sea igual a los tiempos de encendido que se encuentran en el listado. 
+Cuando esto sucede se enciende el módulo DTI (método EncenderDTI) y se imprime por pantalla la lista de empleados que este 
+método devuelve (aquellos que se encuentran en sus puestos de trabajo). 
+
+Cabe aclarar que listaTiemposEncendidos se encuentra ordenada de menor a mayor, 
+por la manera en que fue construida en el método obtenerTiemposDeEncendido, y que DTI se encenderá tantas veces durante el transcurso del día como tiempos haya en este listado.
+
+\begin{lstlisting}[language=Python, caption=Proceso de consulta a DTI]
+
+void ConsultarDTI(lista[int] listaTiemposEncendidos)
+
+    i = 0
         
-        i = 0;
+    Mientras listaTiemposEncendidos != fin
 
-        Mientras listaEmpleados != fin 
-                
-            Si (Tprendido >= listaEmpleados(i).ti); 
-            
-                listaEmpleados.remover(i); 
-                
-            Sino
-                i++; 
+        Esperar hasta que HoraSistema() == listaTiemposEncendidos(i)
 
-            FinSi
-
-        FinMientras
-            
-    Finmientras
-
-Devolver listaTiemposEncendidos; 
+        Imprimir(EncenderDTI())
+        
+        i++
 
 \end{lstlisting}    
 
 
 \subsection{Ejemplo de ejecución}
 
-Solo se detallan los \(t_i\) y \(t_f\) de cada empleado. En las ejecuciones del bucle, se marcan previamente en rojo los empleados que serán eliminados de la lista.
+Solo se detallan los \(t_i\) y \(t_f\) de cada empleado. 
+Se marcan en color rojo los empleados que se recorren y en verde el empleado del cual 
+se consulta su tf (color azul) para guardar en la lista que contendrá los tiempos en los 
+cuales debe encenderse DTI.
 
 
-\underline{Preparación:}
+\underline{Preparación} (ordenar de menor a mayo según tf):
 
 listaEmpleados = \{(1,4) - (2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7) - (5,8) - (2,8) - (6,8) - (1,10) - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
 
@@ -173,32 +204,27 @@ listaTiemposEncendidos = \{\}
 
 listaTiemposEncendidos = \{\textcolor{blue}{4}\}
 
-listaEmpleados = \{\textcolor{red}{(1,4) - (2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7)} - (5,8) - \textcolor{red}{(2,8)} - (6,8) - \textcolor{red}{(1,10)} - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
-
-
-listaEmpleados = \{(5,8) - (6,8) - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
-
+listaEmpleados = \{ \textcolor{green}{(1,4)} - \textcolor{red}{(2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7)} - (5,8) - (2,8) - (6,8) - (1,10) - (5,10) - (7,10) - (7,11) - (8,11) - (10,12) - (11,12) - (12,14)\}
 
 \underline{Segunda ejecución del bucle:}
 
 listaTiemposEncendidos = \{4 - \textcolor{blue}{8}\}
 
-listaEmpleados = \{\textcolor{red}{(5,8) - (6,8) - (5,10) - (7,10) - (7,11) - (8,11)} - (10,12) - (11,12) - (12,14)\}
-
-listaEmpleados = \{(10,12) - (11,12) - (12,14)\}
+listaEmpleados = \{ \textcolor{green}{(1,4)} - \textcolor{red}{(2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7)} - \textcolor{green}{(5,8)} - \textcolor{red}{(2,8) - (6,8) - (1,10) - (5,10) - (7,10) - (7,11) - (8,11)} - (10,12) - (11,12) - (12,14)\}
 
 \underline{Tercera ejecución del bucle}:
 
 listaTiemposEncendidos = \{4 - 8 - \textcolor{blue}{12}\}
 
-listaEmpleados = \{\textcolor{red}{(10,12) - (11,12) - (12,14)}\}
+listaEmpleados = \{ \textcolor{green}{(1,4)} - \textcolor{red}{(2,4) - (2,5) - (3,5) - (3,6) - (1,6) - (2,7)} - \textcolor{green}{(5,8)} - \textcolor{red}{(2,8) - (6,8) - (1,10) - (5,10) - (7,10) - (7,11) - (8,11)} - \textcolor{green}{(10,12)} - \textcolor{red}{(11,12) - (12,14)}\}
 
-listaEmpleados = \{\}
 
 Resultado:
 
 listaTiemposEncendidos = {4 - 8 - 12}
 
+
+Deben realizarse la consulta de encendido a DTI en los tiempos 4, 8 y 12. De esa manera todos los empleados serán consultados en la mínima cantidad de encendidos posibles.
 
 
 \subsection{Análisis del algoritmo}
@@ -305,59 +331,64 @@ Y por otro lado, consideramos la unidad (1) de complejidad espacial como un byte
 Realizamos el siguiente analisis detallado:
 
 \begin{itemize}
-    \item Previo a primer mientras
+    \item Previo a primer Por
     \begin{itemize}
-        \item +3 Declaración, inicialización de totalPiezas y una obtención.
-        \item +4 Declaración de volumenPieza, i, piezaActual, cantidadVolumen.
-        \item +1 asignación a piezaActual.
+        \item +1 asignar mayoritario inválido.
     \end{itemize}
-    \item dentro de primer mientras (éste recorre a lo sumo todas las piezas, el total de lo que se obtenga en costo interno será multiplicado por n).
+    \item Entra a primer por, se itera n veces
     \begin{itemize}
-        \item +1 chequeo de condición de iteración
-        \item +2 obtención de volumen y asignación a volumenPieza.
-        \item +1 asignación a cantidadVolumen.
-        \item +1 asignación a i
+        \item +1 asignacion a piezas iguales
     \end{itemize}
-    \item Dentro de segundo mientras (también dentro de primer mientras, como también puede que recorra la listaPiezas por completo, añade un *n a la complejidad final).
+    \item Entra a segundo por, se itera n veces. En el peor de los casos, entra n/2 veces al si y no entra n/2 veces. (alguna de las dos cantidades será n/2 + 1, pero puede obviarse por que es mínimo el cambio cuando n es muy grande).
     \begin{itemize}
-        \item +1 chequeo de condición de iteración
-        \item +4 dos comparaciones, una obtención y un and (condición si).
-        \item +2 caso entra a si, suma y asignación a cantidadVolumen.
-        \item +2 suma y asignación a i        
+        \item +3 (si entra) chequeo de condición si, suma y asignación. 
+        \item +1 (si no entra) chequeo de condicion si       
     \end{itemize}
-    \item Termina segundo mientras, sigue primer mientras
+    \item fin segundo por
     \begin{itemize}
-        \item +2 costo de condición si, comparación y techo.
-        \item +1 caso entra al si, retorno.
-        \item +2 caso no entra al si, suma y asignación.        
+        \item Al siguiente sí entrará a lo sumo dos veces (dos grupos de piezas de igual volumen, unas de mayor volumen que la otras, pero todas las de mayor volumen están después que las de menor volumen en donde sea que se las guarde).
+        \item En ese caso, se chequeará n veces la condición (una por cada iteración del primer por) y se entrará sólo dos veces al si.
+        \item +2 (si se entra) chequeo de condicion si y asignacion. como sólo sucede dos veces en el peor de los casos, puede obviarse. En nuestro cálculo posterior se lo resume a 1.
+        \item +1 (si no se entra) chequeo de condicion si.
     \end{itemize}
-    \item Termina primer mientras
+    \item Termina primer Por
     \begin{itemize}
         \item +1 retorna, si el retorno no se realizó dentro del primer mientras.
     \end{itemize}
 
 \end{itemize}
 
-Definimos T(n), función de complejidad temporal:
+Con esto se tiene una función de complejidad temporal:
 
 \begin{equation}
-    T(n) = 8 + n* ( 5 + ( (n-1)*9 + n*7 ) + 2 + 2 + 1 ) 
+    T(n) = 1 + n*( 1 + ((n/2)*3) + ((n/2)*1) + 1 )
 \end{equation}
 \begin{equation}
-    T(n) = 8 + n*( 10 + (9n - 9 + 7n) ) = 8 + n*( 16n + 1)
+    T(n) = 1 + n* ( 4*(n/2) + 2 ) 
 \end{equation}
 \begin{equation}
-    T(n) = 16n*n + n + 8
+    T(n) =  1 + n*(2*n+2) = 1 + 2*n^2 + 2*n
 \end{equation}
 
-La asignación de costo en la definición previa de \(T(n)\) se define según el peor caso posible. 
-Este es que se entre a la condición si del segundo mientras, la mayor cantidad de veces posible. 
-Este peor caso es que n sea impar y halla dos subconjuntos de tamaño \(n/2\) (con división entera) cada uno con igual volumen interno y un elemento m, 
-no incluido en alguno de estos subconjuntos. 
-Esto provoca que se ingrese \(n-1\) veces al sí del segundo mientras (una vez por cada elemento de los subconjutos), 
-además de \(n\) no ingresos a dicho si (uno por cada elemento que encuentra al menos a uno sin su mismo volumen, todos lo hacen).
+Representando \(f(n)\) al gasto temporal más alto posible, de ella se obtiene la cota. 
+Como su término más ‘pesado’ es \(2*n^2\), resulta que la cota para la complejidad temporal 
+del algoritmo A es \(O(n^2)\).
 
-Como resultado, \(T(n)\) es \(n^2\).
+Respecto de la \textbf{complejidad espacial}:
+
+\begin{enumerate}
+    \item +n*size(Pieza), espacio ocupado por listaPiezas que contiene n elementos Pieza.
+    \item +5*size(int), espacio ocupado por totalPiezas, volumenPieza, i, piezaActual y cantidadVolumen.
+\end{enumerate}
+
+Por lo tanto, se tiene que E(n), función de espacio total ocupado por la ejecución del algoritmo es:
+
+\begin{equation}
+    E(n) = n*size(Pieza) + 5*size(int) \implies E(n) = O(n)
+\end{equation}
+
+Así, la cota de la complejidad espacial del algoritmo A es O(n)
+
 
 \newpage
 \subsection{Proceso B}
@@ -400,72 +431,33 @@ Retornar 0
 Realizamos el siguiente analisis detallado:
 
 \begin{itemize}
-    \item Incialización:
+    \item Antes del mientras:
     \begin{itemize}
-        \item +n*log(n) costo de ordenamiento.
-        \item +3 Declaración e inicialización de totalPiezas y una obtención.
-        \item +3 Declaraciones de volumenPieza, i, cantidadVolumen.
-        \item +1 Declaración de mismoVolumen.        
-        \item +1 asignación a i.
+        \item +n*log(n) ordenar L de mayor a menor
+        \item +3 asignaciones
     \end{itemize}
-    \item Inicia primer mientras (puede que itere una vez por cada Pieza en la lista, por lo que multiplica el costo en n).
+    \item inicia mientras, puede iterar hasta n-1 veces (de o a n-1 hay n iteraciones)
     \begin{itemize}
-        \item +1 chequeo condicion de iteracion
-        \item +2 asignacion a volumenPieza y obtencion.
-        \item +1 asignacion a cantidadVolumen.
-        \item +1 asignacion a mismoVolumen.
-        \item +2 suma y asignacion a i.
+        \item +3 (entra primer si) chequeo de condición, suma y asignación (entrará a lo sumo n/2 veces, no ocurrirá dos veces porque el retorno está antes de la siguiente iteración).
+        \item +2 (entra a primer sino) chequeo de condición y asignación
+        \item +1 (entra a segundo sí) chequeo de condición (como a lo sumo se entra sólo una vez en toda la ejecución, puede obviarse).
     \end{itemize}
-    \item Inicia segundo mientras (Utiliza el mismo iterador i que el primer mientras, por lo que no se recorre la lista más de una vez entre ambos).
-    \begin{itemize}
-        \item +2 condicion primer si, comparación y obtencion.
-    \end{itemize}
-    \item Entra a primer si.
-    \begin{itemize}
-        \item +2 suma y asignación a cantidadVolumen.
-        \item +2 suma y asignación a i.        
-    \end{itemize}
-    \item No entra a primer si, pasa a primer sino.
-    \begin{itemize}
-        \item +2 condición segundo si, comparación y techo.
-    \end{itemize}
-    \item entra a segundo si.
-    \begin{itemize}
-        \item +1 retorno.
-    \end{itemize}
-    \item No entra a segundo si, pasa a segundo sino.
-    \begin{itemize}
-        \item +1 asignación.
-    \end{itemize}
-    \item Termina segundo mientras. termina primer mientras.
-    \begin{itemize}
-        \item +1 retorna indicador de que no se halló elemento mayoritario
-    \end{itemize}
-
+    \item fin mientras.
 \end{itemize}
 
-Definimos T(n), función de complejidad temporal:
+Con lo obtenido, la función de complejidad temporal para el peor de los casos (el objeto mayoritario es el de menor volumen, por lo tanto, teniendo \(L\) ordenada, se deben iterar \(n-1\) veces para decidirlo como elemento mayoritario) es:
 
 \begin{equation}
-    T(n) = n*log(n) + 8 + n*( 7 + 6 ) - 1 = n*log(n) + 13n + 7 = 13n*log(n) + 7
+    f(n) = n*log(n) + 3 + (n-1)*(5/2) = n*log(n) + 3 + (5/2)*n - 5/2
 \end{equation}
 
+Como aclaración, el 5/2 es la media entre 3 y 2, ya que en el peor de los casos, 
+la mitad de las iteraciones entra al primer sino y la otra mitad entra al primer si.
 
-La asignación de costo en la definición previa de \(T(n)\) se define según el peor caso posible. Dentro del segundo Mientras, hay dos si que separan posibles casos. La iteración más costosa es entrar al primer si y seguir iterando dentro del mismo Mientras. Esto implica que el peor caso según costo es el mismo que para el algoritmo A. \(n\) es impar y se tienen dos subconjuntos de \(n/2\) elementos (división entera) y un elemento más denominado \(m\). 
-Cada subconjunto contiene elementos del mismo peso (distinto peso entre subconjuntos) y m tiene cualquier otro peso, distinto al de cualquiera de los demás elementos. Esta distribución de volumen asegurará la mayor cantidad de iteraciones seguidas dentro del segundo Mientras, sin obtener un elemento mayoritario.
-El \(-1\) se debe a la diferencia \((6 - 5)\) de operaciones entre una iteración corriente entre cualquier elemento de los subconjuntos y la iteración del elemento m. Estas iteraciones son dentro del segundo Mientras.
+De f(n) se obtiene una cota de la complejidad temporal del algoritmo B. 
+Siendo n*log(n) la parte más ‘pesada’ del algoritmo, finalmente la cota es \(O(n*log(n))\)
 
-Por lo tanto, obviando constantes y coeficientes, queda que \(T(n)\) pertenece a la cota \(O(n*log(n))\)
-
-El recorrer la lista, cada elemento se visita una vez y en el peor de los casos va a recorrer la lista completa con n elementos. Entonces podemos decir que es de orden \(O(n)\). 
-Pero debido al ordenamiento, la complejidad total es \(T(n) = O(n log n)\), siendo óptimo el algoritmo de ordenamiento. El ordenamiento debe tenerse en cuenta en la complejidad del algoritmo, ya que, es necesario para el correcto funcionamiento del mismo.
-
-Como observación aparte, otra posibilidad de implementar el proceso “B” es la siguiente: en caso de haber elemento mayoritario, éste debe encontrarse necesariamente en la posición \((n+1)/2\).  Entonces es posible recorrer la lista desde ese elemento hacia atrás y hacia delante, contando cuántas veces que se repite ese volumen. 
-Si la cantidad es mayor que \(n/2\), ese será el elemento mayoritario. 
-De todos modos, la complejidad de este algoritmo sigue estando atada a la complejidad del algoritmo de ordenamiento que se utilice, por lo que no representa ninguna mejora respecto al algoritmo presentado como proceso “B”.
-
-
-Respecto de la complejidad espacial:
+Respecto de la \textbf{complejidad espacial}:
 
 \begin{itemize}
     \item +n*size(Pieza), espacio ocupado por listaPiezas que contiene n elementos Pieza.
@@ -476,8 +468,10 @@ Respecto de la complejidad espacial:
 Por lo tanto, se tiene que E(n), función de espacio total ocupado por la ejecución del algoritmo es:
 
 \begin{equation}
-    E(n) = n*size(Pieza) + 4*size(int) + 1 => E(n) = O(n)    
+    E(n) = n*size(Pieza) + 4*size(int) + 1 \implies E(n) = O(n)   
 \end{equation}
+
+Finalmente, la cota de \textbf{complejidad espacial del algoritmo B} es \(O(n)\).
 
 \newpage
 \subsection{Proceso C}
@@ -615,7 +609,7 @@ El valor de \(K\) llega a su maximo cuando todos los elementos son igual osea qu
 \end{equation}
 
 
-Si aplicamos el teorema del maestro con el \textit{caso 3} para \(a=1\), \(b=2\) y \(f(n)=n\), calculamos:
+Si aplicamos el \textbf{teorema del maestro} con el \textit{caso 3} para \(a=1\), \(b=2\) y \(f(n)=n\), calculamos:
 
 \[
     f(n) = O(n^{(logb(a) + e)}) 
@@ -633,6 +627,96 @@ Con lo cual si e=1 se cumple la primer condición condición. Ahora busco un \(c
 
 Entonces si \(c=1/2\) se cumple la segunda condición y por lo tanto \(T(n) = \Theta(n)\)
 
+\textbf{Cálculo manual de la ecuación de recurrencia C(n)} y explicación de la primer ecuación de recurrencia.
+C(n) es la función de complejidad temporal de la función Candidato. El rol de Candidato es hallar un candidato a elemento mayoritario de una lista L de n elementos, lo cual realiza mediante recurrencia. 
+Analicemos la función para tener contexto. Primero, las condiciones de corte de recurrencia:
+
+\begin{enumerate}
+    \item Si n = 0, significa que no hay candidatos, porque no hay elementos en L.
+    \item Si n = 1, hay sólo un elemento en L, el cual es el candidato.
+\end{enumerate}
+
+Pasadas las condiciones de corte, tenemos la obtención de la lista llamada \textit{ParesIguales} (PI), 
+la cuál es una reducción de L. Ambas están relacionadas de tal forma que, 
+el elemento mayoritario de L seguro será el mayoritario de PI (esto se debe a cómo es construida PI). 
+Lo que importa es que PI es una reducción de L y la principal razón de que sea tan rápida la 
+búsqueda de candidatos.
+Esta reducción es donde se presenta la recurrencia, ya que luego de la ejecución de \textit{ParesIguales} 
+es cuando se realiza el llamado de recurrencia, esta vez con PI en lugar de L. 
+De aquí es entonces, de donde calculamos la recurrencia.
+Tenemos que se llama a candidato con una cierta L que tiene n piezas. Se considera n > 2. 
+Veamos las operaciones a mano:
+
+\begin{enumerate}
+    \item +1 asignación de valor a n
+    \item +2 chequeos de n == 0 y n == 1 (No los pasa). Se llama entonces a ParesIguales, pasándole L.
+    \item +2 asignaciones de k y n
+    \item +1 chequeo de condición (entra al sí que engloba el bucle principal, ya que n > 2 por premisa)    
+\end{enumerate}
+
+Ahora, interesa lo que sucede dentro del bucle. Nótese que itera n/2 veces (empieza de 0 y va a n/2 - 1). 
+En esas n/2 veces puede o no añadir una pieza a PI. 
+Entonces Pi tendrá a lo sumo n/2 piezas. 
+Considerando este caso, el peor, para el cálculo de recurrencia, 
+pondremos que cada vez que se realiza la iteración, 
+se entra en el si y se graba una pieza de L en PI. Por lo tanto tenemos:
+
+\begin{enumerate}
+    \item n/2 veces:
+    \begin{enumerate}
+        \item +2 chequeo de si y suma (siempre entra)
+        \item +2 asignación y suma, con respecto a la posición de la pieza a registrar en PI
+        \item +2 asignación y suma de k
+        \item +2 asignación y suma de i, fuera de si
+    \end{enumerate}
+\end{enumerate}
+
+En resumen: \(+(n/2)*(8) = 4*n\)
+
+Ahora, ParesIguales devuelve la nueva PI y se vuelve a Candidato, donde se continuará la 
+recursividad hasta alcanzar alguna de las condiciones de corte nombradas previamente. 
+Cuando estas se alcanzan, se llega a las condiciones de devolución de Candidato. 
+En resumen, si es par entra a la primera. Sino, entra a la segunda. 
+En verdad, es indistinto para nuestro análisis porque el peor caso no depende de 
+si se realizan 1 o 2 operaciones después de ParesIguales. Esto se debe a que 
+ParesIguales es la parte más ‘pesada’ de la recurrencia. Por lo tanto, se considera:
+
++1 chequeos de devolución.
+
+Finalizando, en este, el peor de los casos, el candidato debe buscarse en una 
+lista de tamaño n/2. Por lo tanto, se tiene que la ecuación de recurrencia de la complejidad temporal para la función Candidato es:
+
+\[
+    C(n) = C(n/2) + 4*n + 7    
+\]
+
+Pero, 4*n + 7 se acota a O(n). De allí se obtiene:
+
+\[
+    C(n) = C(n/2) + O(n), con C(0) = 0 y C(1) = 3  
+\]
+
+Esta ecuación es distinta a la propuesta más arriba porque se basa en un sólo caso particular.
+
+Con respecto a la expresión C(n) = P(n) + C(K) + O(1), puede decirse: 
+\[
+    P(n) + C(K) + O(1) = C(n/2) + O(n)    
+\]
+
+Esto se debe a que, siendo K el máximo de la cantidad máxima de elementos que puede tener PI, 
+o se n/2, queda C(K) = C(n/2).
+
+Ahora, recordemos que P(n), complejidad temporal de ParesIguales, es en su peor caso \(P(n) = 4*n + 7 \in O(n)\).
+Además, O(n) > O(1). Se tiene entonces:
+
+\[
+    P(n) + O(1) = O(n) + O(1) = O(n)  
+\]
+
+Con esto se valida la igualdad original P(n) + C(K) + O(1) = C(n/2) + O(n). 
+Por lo tanto, queda así establecido que la ecuación de recurrencia utilizada 
+para determinar la complejidad temporal del Algoritmo C es C(n/2) + O(n).
+
 La \textbf{complejidad espacial} es \(O(n)\) debido a que el arreglo de elemento se va reduciendo de \( \frac{n}{2*i} \) con \(i > 0\) hasta que quede un elemento. 
 En el peor de los casos pueden haber varios arreglos en memoria que sumados estarian acotados por \(2n\). 
 Con lo cual la complejidad seria \(O(n)\).
@@ -647,12 +731,40 @@ Con lo cual la complejidad seria \(O(n)\).
 
 Como se ve en la tabla, aunque todos tengan la misma complejidad espacial, el Algoritmo C supera a los demás, ya que es óptimo temporalmente.
 
+\newpage
+\section{Instalación y ejecución}
 
-\section{Instrucciones para el código fuente}
+El nombre del programa es \textbf{mayoritario}. Para compilar el programa se necesita tener 
+instalado \textit{CMake 3.15} o superior. 
+Desde la carpeta mayoritario ejecutar los siguientes comandos:
+
+Linux / Windows:
+
+\begin{lstlisting}
+    cmake -DCMAKE_BUILD_TYPE=Release .
+    make    
+\end{lstlisting}
 
 
-El archivo .zip que se presenta contiene una carpeta por cada tipo de Proceso que se ha implementando (“A”, “B” y “C”). En cada carpeta se encuentra un archivo con el rótulo “Instrucciones Algoritmo” en donde se indican los requisitos y procedimientos para su compilación y ejecución. 
-También se pone a disposición el archivo piezas.txt con un posible lote de piezas que analizará el algoritmo implementado.
+Para ejecutar el programa se debe indicar el tipo de proceso a, b, ó c, el nombre del archivo con el listado de numeros 
+que indican el volumen de todas las piezas en un lote.
+
+\begin{lstlisting}
+    mayoritario --proceso [a|b|c] --archivo [ruta de archivo]
+\end{lstlisting}
+
+Luego ejecutar de la siguiente manera:
+
+\begin{lstlisting}
+    ./mayoritario --proceso b --archivo piezas.txt
+\end{lstlisting}
+
+Resultado:
+\begin{lstlisting}
+$ ./mayoritario --proceso b --archivo piezas.txt
+El elemento mayoritario es: 110    
+\end{lstlisting}
+
 
 
 \end{document}
