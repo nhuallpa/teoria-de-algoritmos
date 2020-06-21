@@ -275,10 +275,38 @@ Pero el algoritmo de greedy se detiene con el empleado \(i_k\) y este supuestame
 
 \textbf{Complejidad de algoritmo e implementación}: 
 El algoritmo corre con una complejidad temporal total \(O(nlog(n))\), puesto que si la lista no esta ordenada 
-debemos utilizar un método de ordenamiento como por ejemplo el heapsort, cuya complejidad es del 
+debemos utilizar un método de ordenamiento como por ejemplo el \textit{stable sort}, cuya complejidad es del 
 orden \(O(n log(n))\). 
-Dado el algoritmo de greddy, al recorrer todos los intervalos una vez, gastamos un tiempo constante 
-por cada intervalo. Por lo tanto esta parte del algoritmo es \(O(n)\).
+
+La \textbf{complejidad temporal} del algoritmo greedy es \(O(n)\), dado que se recorre una única vez el arreglo. 
+Verifica si el ti del próximo empleado en la lista es mayor a tfx, si lo es, guarda en tfx el 
+tf de dicho empleado y añade tfx a la lista de tiempos de encendido. De todas maneras, 
+el algoritmo queda atado, en su complejidad temporal, al ordenamiento utilizado para el 
+arreglo de empleados. En nuestro caso \(O(nlogn)\).
+
+La \textbf{complejidad espacial} del algoritmo es O(n) porque simplemente utiliza una estructura arreglo 
+con \(n\) empleados y luego crea una estructura arreglo con, en el peor de los casos, n tiempos. Conclusión:
+
+\begin{itemize}
+    \item TEMPORAL: O(nlogn)+O(n) = O(nlogn)
+    \item ESPACIAL: O(n)+O(n) = O(2n) = O(n)
+\end{itemize}
+
+La función \textbf{consultarDTI} es óptima porque realiza la mínima cantidad de iteraciones necesarias para que la 
+lista de tiempos sea procesada. Es necesario activar DTI al menos una vez por cada tiempo en 
+la lista de tiempos de activación, por lo tanto, la mínima cantidad de iteraciones 
+requeridas es n, siendo n la cantidad de tiempos de activación en la lista. 
+El algoritmo itera una sola vez por cada tiempo de activación y sólo requiere de 4 
+operaciones cada vez, chequear si termino de recorrer la lista de tiempos de activación, 
+entrar en standby hasta que sea tiempo de activar DTI, activar DTI y avanzar en la lista. 
+Ninguna de estas operaciones puede obviarse. La condición de chequeo es necesaria para que no 
+itere eternamente. El standby o se realiza en esta función o lo realiza el propio DTI, 
+de todas maneras debe ejecutarse. La activación de DTI debe realizarse, ya que es la razón 
+de uso de este algoritmo. 
+Por último, se debe poder avanzar en la lista para activar DTI en todos los tiempos necesarios. 
+Por lo tanto, como no se puede reducir la cantidad de operaciones, 
+se itera la mínima cantidad de veces y funciona, el algoritmo es óptimo.
+
 
 \newpage
 \section{Una nueva regulación industrial}
