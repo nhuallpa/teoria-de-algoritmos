@@ -10,6 +10,7 @@
   basicstyle=\ttfamily,
 }
 
+%Hipervinculos
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -18,6 +19,14 @@
     linkcolor=black,
     urlcolor=black
 }
+
+%header
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\leftmark}
+\fancyfoot[LE,RO]{\thepage}
+
 
 
 \renewcommand{\baselinestretch}{1.2}
@@ -84,12 +93,7 @@
 
 \newpage{}
 
-\newpage
-\section{Introducción}
-
-En el presente trabajo plantearemos dos soluciónes mediante algoritmos para al problema de ausentismo de una empresa y sobre una nueva regulación industrial. 
-
-\section{Un problema de ausentismo}
+\section{Parte 1 : Un problema de ausentismo}
 
 \subsection{Descripción del problema}
 
@@ -135,28 +139,21 @@ El algoritmo funciona de la siguiente manera:
 
 \subsection{Pseudocódigo del algoritmo}
 
-\begin{lstlisting}[language=Python, caption=Algoritmo de greddy para tiempos de encendido]
+\begin{lstlisting}[language=Python, caption=Algoritmo greddy para tiempos de encendido]
 lista[int] obtenerTiemposDeEncendido(lista[empleado] listaEmpleados)
 
-	OrdenarDeMenorAMayorPorTiempoFinal(listaEmpleados)
-
-	tiempoFin = listaEmpleados(0).obtenerTF
-
+    OrdenarDeMenorAMayorPorTiempoFinal(listaEmpleados)
+    tiempoFin = listaEmpleados(0).obtenerTF
     listaTiemposEncendidos.agregar(tiempoFin)
+    i = 1
 
-	i = 1
+    Mientras (listaEmpleados != fin)
+        Si listaEmpleados(i).obtenerTI > tiempoFin
+            tiempoFin = listaEmpleados(i).obtenerTF
+            listaTiemposEncendidos.agregar(tiempoFin)
+        i++
 
-	Mientras(listaEmpleados != fin)
-
-		Si(listaEmpleados(i).obtenerTI > tiempoFin)
-
-			tiempoFin = listaEmpleados(i).obtenerTF
-
-	        listaTiemposEncendidos.agregar(tiempoFin)
-
-		i++
-
-Devolver listaTiemposEncendidos	
+    Devolver listaTiemposEncendidos	
 \end{lstlisting}    
 
 
@@ -309,7 +306,7 @@ se itera la mínima cantidad de veces y funciona, el algoritmo es óptimo.
 
 
 \newpage
-\section{Una nueva regulación industrial}
+\section{Parte 2 : Una nueva regulación industrial}
 
 \subsection{Descipción del problema}
 A raiz de una nueva regulación industrial un fabricante debe rotular cada lote que produce según un valor numérico que lo caracteriza. 
@@ -435,7 +432,7 @@ piezas_iguales = 1
 mayoritario = 0
 i = 0
 
-Mientras i < n -1 
+Por cada i hasta n-1 
     
     si v[i] == v[i+1] entonces 
         piezas_iguales = piezas_iguales + 1
@@ -530,84 +527,62 @@ Caso contrario, el lote deberá ser descartado.
 \subsubsection{Pseudocódigo}
 
 \begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Elemento Mayoritario]
-int ElementoMayoritario(list[pieza] listaPiezas) 
-
-	int elCandidato;
-	int n = listaPiezas.contar();
-	elCandidato = Candidato(listaPiezas);
-
-	Si (elCandidato  == 0 || Apariciones(listaPiezas, elCandidato) <= piso(n/2))
-		Retornar 0; //0 indica que el lote debe ser descartado, puesto que no hay elemento mayoritario
-	Sino
-		Retornar elCandidato; 
-
-	FinSi
+ElementoMayoritario(listaPiezas) 
+    n = largo listaPiezas
+    candidato = Candidato(listaPiezas)
+    Si  elCandidato  = 0 o Apariciones(listaPiezas, elCandidato) <= piso(n/2) entonces 
+        Devolver 0 //0 indica que el lote debe ser descartado, puesto que no hay elemento mayoritario
+    Sino
+        Devolver candidato
+    FinSi
 Fin ElementoMayoritario
-
 \end{lstlisting}
 \begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Apariciones]
-int Apariciones(list[pieza] listaPiezas, int volBuscado)
-	
-	int cantidad = 0;
-	int final = listaPiezas.contar() - 1;
-
-	Para (int i = 0, i <= final; i++)
-		
-		Si (listaPiezas(i).volumen  == volBuscado)
-			cantidad++;
-		FinSi
-
-	FinPara
-
-	Retornar cantidad;
+Apariciones(listaPiezas, volumenBuscado)
+    cantidad = 0
+    final = largo listaPiezas -1
+    Para  i = 0 hasta final hacer
+        Si  volumen de listaPiezas(i)  = volumenBuscado entonces
+            cantidad++
+        FinSi
+    FinPara
+Devolver cantidad
 Fin Aparaciones
 \end{lstlisting}
 \begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Candidato]
-int Candidato(list[pieza] listaPiezas)
-
-	int n, m;
-	n = listaPiezas.contar();
-
-	Si (n == 0)
-		Retornar 0;
-	FinSi
-
-	Si (n == 1)
-		Retornar  listaPiezas(0).volumen;
-	FinSi
-
-	lista[piezas] paresIguales = EncontrarParesIguales(listaPiezas);
-	m = Candidato(paresIguales);
-
-	Si ((n % 2 == 0) || m != 0)
-		Retornar m;
-	Sino
-		Retornar listaPiezas(n-1).volumen;
-	FinSi
-
+Candidato(listaPiezas)
+    n = cantidad listaPiezas
+    Si n = 0 entonces
+        Devolver 0
+    FinSi
+    Si n = 1 entonces
+        Devolver volumen de listaPiezas(0)
+    FinSi
+    paresIguales = EncontrarParesIguales(listaPiezas)
+    m = Candidato(paresIguales)
+    Si n par o m != 0 entonces
+        Devolver m
+    Sino
+        Devolver volumen de listaPiezas(n-1)
+    FinSi
 Fin Candidato
-
 \end{lstlisting}
-\begin{lstlisting}[language=Python, caption=Algoritmo del proceso A]
-list[pieza] EncontrarParesIguales(list[pieza] listaPiezas)
-
-    list[pieza] listaParesIguales;
-    int n = listaPiezas.contar();
-    int k = 0;
-    si (n > 2)
-        Para (int i = 0, i <= (n/2) - 1, i++)
-            Si (listaPiezas(2i).volumen == listaPiezas(2i + 1).volumen)
-                listaParesIguales(k) = listaPiezas(2i + 1);
-                k++;
+\begin{lstlisting}[language=Python, caption=Algoritmo del proceso C - Encontrar Pares Iguales]
+EncontrarParesIguales(listaPiezas)
+    n = cantidad listaPiezas
+    k = 0
+    Si n > 2 entonces
+        Para i = 0 hasta (n/2) - 1 hacer
+            Si volumen de listaPiezas(2i) = volumen de listaPiezas(2i + 1) entonces
+                listaParesIguales(k) = listaPiezas(2i + 1)
+                k++
             FinSi
         FinPara
     Sino
-        listaParesIguales(0) = listaPiezas(0);
+        listaParesIguales(0) = listaPiezas(n-1)
     FinSino
-    
-    Retornar listaParesIguales;
+    Devolver listaParesIguales
 Fin EncontrarParesIguales
-
 \end{lstlisting}
 
 \subsubsection{Analisis del algoritmo}
@@ -672,17 +647,17 @@ búsqueda de candidatos.
 Esta reducción es donde se presenta la recurrencia, ya que luego de la ejecución de \textit{ParesIguales} 
 es cuando se realiza el llamado de recurrencia, esta vez con PI en lugar de L. 
 De aquí es entonces, de donde calculamos la recurrencia.
-Tenemos que se llama a candidato con una cierta L que tiene n piezas. Se considera n > 2. 
+Tenemos que se llama a candidato con una cierta L que tiene n piezas. Se considera \(n > 2\). 
 Veamos las operaciones a mano:
 
 \begin{enumerate}
     \item +1 asignación de valor a n
     \item +2 chequeos de n == 0 y n == 1 (No los pasa). Se llama entonces a ParesIguales, pasándole L.
     \item +2 asignaciones de k y n
-    \item +1 chequeo de condición (entra al sí que engloba el bucle principal, ya que n > 2 por premisa)    
+    \item +1 chequeo de condición (entra al sí que engloba el bucle principal, ya que \(n > 2\) por premisa)    
 \end{enumerate}
 
-Ahora, interesa lo que sucede dentro del bucle. Nótese que itera n/2 veces (empieza de 0 y va a n/2 - 1). 
+Ahora, interesa lo que sucede dentro del bucle. Nótese que itera n/2 veces (empieza de 0 y va a \(n/2 - 1\)). 
 En esas n/2 veces puede o no añadir una pieza a PI. 
 Entonces Pi tendrá a lo sumo n/2 piezas. 
 Considerando este caso, el peor, para el cálculo de recurrencia, 
@@ -749,7 +724,7 @@ La \textbf{complejidad espacial} es \(O(n)\) debido a que el arreglo de elemento
 En el peor de los casos pueden haber varios arreglos en memoria que sumados estarian acotados por \(2n\). 
 Con lo cual la complejidad seria \(O(n)\).
 
-
+\newpage
 \subsection{Comparaciones}
 
 \begin{figure}[h!]
@@ -760,7 +735,7 @@ Con lo cual la complejidad seria \(O(n)\).
 Como se ve en la tabla, aunque todos tengan la misma complejidad espacial, el Algoritmo C supera a los demás, ya que es óptimo temporalmente.
 
 \newpage
-\section{Instalación y ejecución}
+\subsection{Instalación y ejecución}
 
 El nombre del programa es \textbf{mayoritario}. Para compilar el programa se necesita tener 
 instalado \textit{CMake 3.15} o superior. 
