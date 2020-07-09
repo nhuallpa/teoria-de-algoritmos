@@ -54,15 +54,7 @@ map<int, int> SeleccionadorProductos::calcularAnteriorePosibles() {
     map<int, int> anteriorPosible;
     while ( i > 1) {
 
-
-        //auto restriccionProducto = this->restricciones.find(productos.at(j).getNombre());
-        //if (restriccionProducto != this->restricciones.end() &&
-            //productos.at(i).mismoNombre(this->restricciones.at(productos.at(j).getNombre()))) {
-            //restriccionProducto->second.find(productos.at(i).getNombre()) != restriccionProducto->second.end();
         if (!this->permiteSembrarSeguidos(productos.at(j), productos.at(i))) {
-            j -= 1;
-        } else if (productos.at(i).mismoTrimestre(productos.at(j)) ||
-                    productos.at(i).mismoNombre(productos.at(j).getNombre())) {
             j -= 1;
         } else {
             anteriorPosible[i] = j;
@@ -98,10 +90,13 @@ bool SeleccionadorProductos::permiteSembrarSeguidos(Producto &productoA, Product
     bool estaPermitido = false;
     auto unProductoAnterior = this->restriccionesAgrupadas.find(productoA.getNombre());
 
-    if (unProductoAnterior == this->restriccionesAgrupadas.end())  {
-        estaPermitido = true;
-    } else if (unProductoAnterior->second.find(productoB.getNombre()) == unProductoAnterior->second.end()) {
-        estaPermitido = true;
+    if (!productoA.mismoNombre(productoB.getNombre()) && !productoA.mismoTrimestre(productoB)) {
+        if (unProductoAnterior == this->restriccionesAgrupadas.end())  {
+            estaPermitido = true;
+        } else if (unProductoAnterior->second.find(productoB.getNombre()) == unProductoAnterior->second.end()) {
+            estaPermitido = true;
+        }
     }
+
     return estaPermitido;
 }
