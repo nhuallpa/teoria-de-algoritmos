@@ -15,11 +15,14 @@ using std::map;
 class SeleccionadorProductos {
 
 private:
+
     vector<Producto> productos;
-    std::map<string, string> restricciones;
+    std::vector<std::pair<string, string> >  restricciones;
+
+    std::map<string, std::map<string, string> > restriccionesAgrupadas;
 
 public:
-    SeleccionadorProductos(const vector<Producto> &productos, const std::map<string, string> &restricciones);
+    SeleccionadorProductos(const vector<Producto> &productos, const std::vector<std::pair<string, string> >  &restricciones);
 
 public:
     /**
@@ -31,6 +34,8 @@ public:
     vector<Producto> seleccionar();
 
     map<int, int> calcularAnteriorePosibles();
+
+    bool permiteSembrarSeguidos(Producto &producto, Producto &producto1);
 };
 
 

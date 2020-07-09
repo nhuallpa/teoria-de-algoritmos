@@ -53,21 +53,55 @@ map<int, int> SeleccionadorProductos::calcularAnteriorePosibles() {
     int j = n - 1;
     map<int, int> anteriorPosible;
     while ( i > 1) {
-        auto search = this->restricciones.find(productos.at(j).getNombre());
-        if (search != this->restricciones.end() &&
-            productos.at(i).mismoNombre(this->restricciones.at(productos.at(j).getNombre()))) {
+
+
+        //auto restriccionProducto = this->restricciones.find(productos.at(j).getNombre());
+        //if (restriccionProducto != this->restricciones.end() &&
+            //productos.at(i).mismoNombre(this->restricciones.at(productos.at(j).getNombre()))) {
+            //restriccionProducto->second.find(productos.at(i).getNombre()) != restriccionProducto->second.end();
+        if (!this->permiteSembrarSeguidos(productos.at(j), productos.at(i))) {
             j -= 1;
-        } else if (productos.at(i).mismoTrimestre(productos.at(j))) {
+        } else if (productos.at(i).mismoTrimestre(productos.at(j)) ||
+                    productos.at(i).mismoNombre(productos.at(j).getNombre())) {
             j -= 1;
         } else {
             anteriorPosible[i] = j;
             i -= 1;
+            j = i - 1;
         }
     }
     return anteriorPosible;
 }
 
 SeleccionadorProductos::SeleccionadorProductos(const vector<Producto> &productos,
-                                               const map<string, string> &restricciones) : productos(productos),
+                                               const std::vector<std::pair<string, string> >  &restricciones) : productos(productos),
                                                                                            restricciones(
-                                                                                                   restricciones) {}
+                                                                                                   restricciones) {
+    for (std::pair<string, string> element : this->restricciones) {
+        string nombreProducto = element.first;
+        string nombreRestringido = element.second;
+        std::pair<string, string> B(nombreRestringido,nombreRestringido);
+        auto restriccionProducto = this->restriccionesAgrupadas.find(nombreProducto);
+
+        if (restriccionProducto != this->restriccionesAgrupadas.end()) {
+            restriccionProducto->second.insert(B);
+        } else {
+            std::map<string, string> nuevaRestriccion;
+            nuevaRestriccion.insert(B);
+            this->restriccionesAgrupadas.insert(std::pair<string, std::map<string, string>>(nombreProducto, nuevaRestriccion));
+        }
+
+    }
+}
+
+bool SeleccionadorProductos::permiteSembrarSeguidos(Producto &productoA, Producto &productoB) {
+    bool estaPermitido = false;
+    auto unProductoAnterior = this->restriccionesAgrupadas.find(productoA.getNombre());
+
+    if (unProductoAnterior == this->restriccionesAgrupadas.end())  {
+        estaPermitido = true;
+    } else if (unProductoAnterior->second.find(productoB.getNombre()) == unProductoAnterior->second.end()) {
+        estaPermitido = true;
+    }
+    return estaPermitido;
+}

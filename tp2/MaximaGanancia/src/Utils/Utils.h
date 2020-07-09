@@ -22,7 +22,7 @@ public:
     static void mostrarAyuda();
 
     static std::vector<Producto> cargarProductos(std::string rutaArchivo);
-    static std::map<string, string> cargarRestricciones(std::string rutaArchivo);
+    static std::vector<std::pair<string, string>> cargarRestricciones(std::string rutaArchivo);
 
     static bool comparadorDosProductos(Producto unProducto, Producto otroProducto);
 

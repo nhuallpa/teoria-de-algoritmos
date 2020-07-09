@@ -86,9 +86,9 @@ std::vector<Producto> Utils::cargarProductos(std::string rutaArchivo) {
 }
 
 
-std::map<string, string> Utils::cargarRestricciones(std::string rutaArchivo) {
+std::vector<std::pair<string, string> > Utils::cargarRestricciones(std::string rutaArchivo) {
 
-    std::map<string, string> restricciones;
+    std::vector<std::pair<string, string> >  restricciones;
 
     ifstream archivo;
     archivo.open(rutaArchivo.c_str(), std::ifstream::in);
@@ -100,7 +100,8 @@ std::map<string, string> Utils::cargarRestricciones(std::string rutaArchivo) {
         try {
             vector<string> campos = split(linea, ",");
             // validar longitud y tipo de datos en campos
-            restricciones[campos.at(0)] = campos.at(1);
+            restricciones.emplace_back(campos.at(0), campos.at(1));
+
         } catch (exception &e) {
             throw invalid_argument("El formato del archivo de RESTRICCIONES es incorrecto.");
         }
